@@ -103,11 +103,11 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label class="form-label">Süre Girişi 1:</label>
-                            <input type="number" name="sure1[0]" class="form-control" value="1000">
+                            <input type="number" name="sure1[0]" class="form-control">
                         </div>
                         <div class="col-6">
                             <label class="form-label">Süre Girişi 2:</label>
-                            <input type="number" name="sure2[0]" class="form-control" value="2000">
+                            <input type="number" name="sure2[0]" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -154,11 +154,11 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label class="form-label">Süre Girişi 1:</label>
-                            <input type="number" name="sure1[<?= $i; ?>]" class="form-control" value="1000">
+                            <input type="number" name="sure1[<?= $i; ?>]" class="form-control">
                         </div>
                         <div class="col-6">
                             <label class="form-label">Süre Girişi 2:</label>
-                            <input type="number" name="sure2[<?= $i; ?>]" class="form-control" value="2000">
+                            <input type="number" name="sure2[<?= $i; ?>]" class="form-control">
                         </div>
                     </div>
                     <script>
@@ -236,13 +236,6 @@
                     foreach ($seciliGrup as $grupNo => $grup) { ?>
                         <li class="list-group-item">
                             Grup D<?= $grupNo; ?>: <?= implode(', ', $grup); ?>
-                            <br>
-                            <?php if ($_POST['sure1'][$grupNo]) {
-                                #echo "Süre1: " . $_POST['sure1'][$grupNo];
-                            }  ?>
-                            <?php if ($_POST['sure2'][$grupNo]) {
-                                #echo " | Süre2: " . $_POST['sure2'][$grupNo];
-                            } ?>
                         </li>
                     <?php } ?>
                 </ul>
@@ -251,70 +244,70 @@
                 <h4 class="text-danger">Gerekli Bilgiler</h4>
                 <div>
                     <label>Açıklama:</label>
-                    <input type="text" name="aciklama" class="form-control" autofocus autocomplete="off" value="aciklama">
+                    <input type="text" name="aciklama" class="form-control" autofocus autocomplete="off">
                 </div>
                 <div class="row">
                     <div class="col-6">
                         <label>X:</label>
-                        <input type="number" name="x" class="form-control" required value="10">
+                        <input type="number" name="x" class="form-control" required>
                     </div>
                     <div class="col-6">
                         <label>Y:</label>
-                        <input type="number" name="y" class="form-control" required value="-10">
+                        <input type="number" name="y" class="form-control" required>
                     </div>
                     <div class="col-6">
                         <label>Emniyetli Yükseklik:</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text">Z</span>
-                            <input type="number" name="emniyetliYukseklik" class="form-control" required value="10">
+                            <input type="number" name="emniyetliYukseklik" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-6">
                         <label>İşlem Yüksekliği:</label>
                         <div class="input-group mb-3 col-6">
                             <span class="input-group-text">Z</span>
-                            <input type="number" name="islemYuksekligi" class="form-control" required value="15">
+                            <input type="number" name="islemYuksekligi" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-6">
                         <label>Dozaj Aç Komutu:</label>
                         <div class="input-group mb-3 col-6">
                             <span class="input-group-text">M</span>
-                            <input type="number" name="dozajAcKomutu" class="form-control" required value="102">
+                            <input type="number" name="dozajAcKomutu" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-6">
                         <label>Dozaj Kapat Komutu:</label>
                         <div class="input-group mb-3 col-6">
                             <span class="input-group-text">M</span>
-                            <input type="number" name="dozajKapatKomutu" class="form-control" required value="202">
+                            <input type="number" name="dozajKapatKomutu" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-6">
                         <label>G00 Hız:</label>
                         <div class="input-group mb-3 col-6">
                             <span class="input-group-text">F</span>
-                            <input type="number" name="g00Hiz" class="form-control" required value="10">
+                            <input type="number" name="g00Hiz" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-6">
                         <label>G01 Hız:</label>
                         <div class="input-group mb-3 col-6">
                             <span class="input-group-text">F</span>
-                            <input type="number" name="g01Hiz" class="form-control" required value="10">
+                            <input type="number" name="g01Hiz" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-4">
                         <label>Home X Kordinatı:</label>
-                        <input type="number" name="homeXKordinati" class="form-control" required value="10">
+                        <input type="number" name="homeXKordinati" class="form-control" required>
                     </div>
                     <div class="col-4">
                         <label>Home Y Kordinatı:</label>
-                        <input type="number" name="homeYKordinati" class="form-control" required value="10">
+                        <input type="number" name="homeYKordinati" class="form-control" required>
                     </div>
                     <div class="col-4">
                         <label>Home Z Kordinatı:</label>
-                        <input type="number" name="homeZKordinati" class="form-control" required value="10">
+                        <input type="number" name="homeZKordinati" class="form-control" required>
                     </div>
                     <div class="col-4 mt-3">
                         <button class="btn btn-primary col-12" name="bilgiKaydet">Kaydet</button>
@@ -395,7 +388,7 @@
             echo "<br><br>";
         }
         echo "</div>";
-        // session_destroy();
+        session_destroy();
     }
     ?>
     <div class="text-end container col-sm-6 mt-3">
