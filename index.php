@@ -101,13 +101,9 @@
                 <div>
                     <h6>Grup D0 için süre seçimi:</h6>
                     <div class="row mb-3">
-                        <div class="col-6">
+                        <div class="">
                             <label class="form-label">Süre Girişi 1:</label>
                             <input type="number" name="sure1[0]" class="form-control">
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Süre Girişi 2:</label>
-                            <input type="number" name="sure2[0]" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -127,7 +123,7 @@
 
                         <div>
                             <label class="form-check-label" for="grupDurum<?= $i; ?>">
-                                Grup D<?= $i; ?> Durum:
+                                Çizgi:
                             </label>
                             <div class="form-check d-inline-block align-middle">
                                 <input class="form-check-input" type="checkbox" name="grupDurum[<?= $i; ?>]" id="grupDurum<?= $i; ?>">
@@ -136,16 +132,16 @@
                         <div class="durumKutu" id="durumKutuId<?= $i; ?>">
                             <div class="row border-bottom pb-2">
                                 <div class="col-6">
-                                    <label for="" class="form-label">Veri: </label>
+                                    <label for="" class="form-label">Uzunluk: </label>
                                     <div>
-                                        <input type="number" name="veriGrup[<?= $i; ?>]" class="form-control" max="4.99" min="0" step="0.01" value="0">
+                                        <input type="number" name="uzunluk[<?= $i; ?>]" class="form-control" max="4.99" min="0" step="0.01" value="0" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label">Açı Değeri:</label>
-                                    <select name="aci_degeri[<?= $i; ?>]" class="form-select">
-                                        <option value="0" selected>0</option>
-                                        <option value="90">90</option>
+                                    <select name="aci_degeri[<?= $i; ?>]" class="form-select" required>
+                                        <option value="0">0 (X)</option>
+                                        <option value="90">90 (Y)</option>
                                     </select>
                                 </div>
                             </div>
@@ -205,7 +201,9 @@
         $_SESSION['sure1'] = $_POST['sure1'];
         $_SESSION['sure2'] = $_POST['sure2'];
         $_SESSION['d0_sure1'] = $_POST['sure1'][0];
-        $_SESSION['d0_sure2'] = $_POST['sure2'][0];
+
+        $_SESSION['uzunluk'] = $_POST['uzunluk'];
+        $_SESSION['aci_degeri'] = $_POST['aci_degeri'];
         foreach ($aperture_degerleri as $aperture) {
             $durum = false;
             foreach ($seciliGrup as $grup) {
@@ -226,11 +224,6 @@
                     <?php if (count($d0_) > 0) { ?>
                         <li class="list-group-item">Grup D0:
                             <?= implode(', ', $d0_); ?>
-                            <br>
-                            <?php if ($_POST['sure1'][0]) {
-                            }  ?>
-                            <?php if ($_POST['sure2'][0]) {
-                            } ?>
                         </li>
                     <?php }
                     foreach ($seciliGrup as $grupNo => $grup) { ?>
@@ -318,14 +311,19 @@
     <?php
     }
     if (isset($_POST['bilgiKaydet'])) {
-        if (isset($_SESSION["veri_array"])) {
-            $veri_array = $_SESSION["veri_array"];
-        }
         $aciklama = $_POST["aciklama"];
         $x = $_POST["x"];
         $y = $_POST["y"];
         $emniyetliYukseklik = $_POST["emniyetliYukseklik"];
         $g00Hiz = $_POST["g00Hiz"];
+        $g01Hiz = $_POST["g01Hiz"];
+        if (isset($_SESSION["veri_array"])) {
+            $veri_array = $_SESSION["veri_array"];
+        }
+        if (isset($_SESSION["aci_degeri"]) && isset($_SESSION["uzunluk"])) {
+            $aci_degeri = $_SESSION["aci_degeri"];
+            $uzunluk = $_SESSION["uzunluk"];
+        }
         function a_ret($grupNo)
         {
             $emniyetliYukseklik = $_POST["emniyetliYukseklik"];
@@ -334,16 +332,29 @@
             $homeXKordinati = $_POST["homeXKordinati"];
             $homeYKordinati = $_POST["homeYKordinati"];
             $islemYuksekligi = $_POST["islemYuksekligi"];
-            $g01Hiz = $_POST["g01Hiz"];
             $homeZKordinati = $_POST["homeZKordinati"];
-
+            $sure1 = $_SESSION['sure1'];
+            $sure2 = $_SESSION['sure2'];
             // echo $value . "<br>";
-            echo "G1Z$islemYuksekligi" . "F" . $g01Hiz . "<br>";
+
+            echo "G1Z$islemYuksekligi" . "<br>";
             echo "M$dozajAcKomutu<br>";
-            echo "G4P" . $_SESSION['sure1'][$grupNo] . "<br>";
-            echo "M$dozajKapatKomutu<br>";
+            if ($sure1[$grupNo] != 0) {
+                echo "G4P" . $sure1[$grupNo] . "<br>";
+            }
+            global $aci_degeri;
+            if ($aci_degeri[$grupNo] == 0) {
+                echo "X" . $_SESSION["veri_x_bitis"] . "Y" . $_SESSION["veri_y"];
+            } elseif ($aci_degeri[$grupNo] == 90) {
+                echo "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y_bitis"];
+            }
+            echo "<br>M$dozajKapatKomutu<br>";
             echo "G0Z$emniyetliYukseklik<br>";
-            // echo "G4P" . $_SESSION['sure2'][$grupNo] . "<br>";
+            if ($grupNo != 0) {
+                if ($sure2[$grupNo] != 0) {
+                    // echo "G4P" . $sure2[$grupNo] . "<br>";
+                }
+            }
         }
         function kordinatHesap($value, $x, $y, $emniyetliYukseklik)
         {
@@ -351,13 +362,33 @@
             preg_match('/X([\d.]+)Y([\d.]+)/', $kordinat, $cikti);
             $veri_x = $cikti[1];
             $veri_y = $cikti[2];
-            $veri_x = floatval($veri_x) + floatval($x);
-            $veri_y = floatval($veri_y) + floatval($y);
-            echo "X" . $veri_x . "Y" . $veri_y . "Z" . $emniyetliYukseklik . "<br>";
+            $_SESSION["veri_x"] = $veri_x = floatval($veri_x) + floatval($x);
+            $_SESSION["veri_y"] = $veri_y = floatval($veri_y) + floatval($y);
+
+            if (!function_exists('aci_0')) {
+                function aci_0($uzunluk, $emniyetliYukseklik)
+                {
+                    global $veri_x, $veri_y;
+                    $_SESSION["veri_x_baslangic"] = $veri_x_baslangic = $_SESSION["veri_x"] - ($uzunluk / 2);
+                    $_SESSION["veri_x_bitis"] = $veri_x_bitis = $_SESSION["veri_x"] + ($uzunluk / 2);
+                    echo "G0X" . $veri_x_baslangic . "Y" . $_SESSION["veri_y"] . "Z" . $emniyetliYukseklik . "<br>";
+                }
+            }
+            if (!function_exists('aci_90')) {
+                function aci_90($uzunluk, $emniyetliYukseklik)
+                {
+                    global $veri_x, $veri_y;
+                    $_SESSION["veri_y_baslangic"] = $veri_y_baslangic = $_SESSION["veri_y"] - ($uzunluk / 2);
+                    $_SESSION["veri_y_bitis"] = $veri_y_bitis = $_SESSION["veri_y"] + ($uzunluk / 2);
+                    echo "G0X" . $_SESSION["veri_x"] . "Y" . $veri_y_baslangic . "Z" . $emniyetliYukseklik . "<br>";
+                }
+            }
+            // echo "X" . $veri_x . "Y" . $veri_y . "Z" . $emniyetliYukseklik . "<br>";
         }
-        echo "<div class='container col-sm-6'>";
+        echo "<pre class='container col-sm-6 fs-6'>";
         echo "($aciklama)<br>";
-        echo "G0F$g00Hiz" . "<br><br>";
+        echo "G0F$g00Hiz" . "<br>";
+        echo "G01F" . $g01Hiz . "<br><br>";
         foreach ($veri_array as $index => $item) {
             foreach ($item as $key => $value) {
                 if ($key == "Location") {
@@ -373,6 +404,8 @@
                         $bulundu = false;
                         foreach ($seciliGrup as $grupNo => $grup) {
                             if (in_array($value, $grup)) {
+                                $g = "aci_$aci_degeri[$grupNo]";
+                                $g($uzunluk[$grupNo], $emniyetliYukseklik);
                                 a_ret($grupNo);
                                 $bulundu = true;
                                 break;
@@ -385,9 +418,9 @@
                     }
                 }
             }
-            echo "<br><br>";
+            echo "<br>";
         }
-        echo "</div>";
+        echo "</pre>";
         session_destroy();
     }
     ?>
