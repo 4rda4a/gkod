@@ -343,12 +343,14 @@
                 echo "G4P" . $sure1[$grupNo] . "<br>";
             }
             global $aci_degeri;
-            if ($aci_degeri[$grupNo] == 0) {
-                echo "X" . $_SESSION["veri_x_bitis"] . "Y" . $_SESSION["veri_y"];
-            } elseif ($aci_degeri[$grupNo] == 90) {
-                echo "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y_bitis"];
+            if (isset($aci_degeri) && isset($aci_degeri[$grupNo])) {
+                if ($aci_degeri[$grupNo] == 0) {
+                    echo "X" . $_SESSION["veri_x_bitis"] . "Y" . $_SESSION["veri_y"] . "<br>";
+                } elseif ($aci_degeri[$grupNo] == 90) {
+                    echo "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y_bitis"] . "<br>";
+                }
             }
-            echo "<br>M$dozajKapatKomutu<br>";
+            echo "M$dozajKapatKomutu<br>";
             echo "G0Z$emniyetliYukseklik<br>";
             if ($grupNo != 0) {
                 if ($sure2[$grupNo] != 0) {
@@ -364,6 +366,7 @@
             $veri_y = $cikti[2];
             $_SESSION["veri_x"] = $veri_x = floatval($veri_x) + floatval($x);
             $_SESSION["veri_y"] = $veri_y = floatval($veri_y) + floatval($y);
+            $_SESSION["d0_location"] = "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y"];
 
             if (!function_exists('aci_0')) {
                 function aci_0($uzunluk, $emniyetliYukseklik)
@@ -403,16 +406,19 @@
                         }
                         $bulundu = false;
                         foreach ($seciliGrup as $grupNo => $grup) {
-                            if (in_array($value, $grup)) {
-                                $g = "aci_$aci_degeri[$grupNo]";
-                                $g($uzunluk[$grupNo], $emniyetliYukseklik);
-                                a_ret($grupNo);
-                                $bulundu = true;
-                                break;
+                            if ($grupNo != 0) {
+                                if (in_array($value, $grup)) {
+                                    $g = "aci_$aci_degeri[$grupNo]";
+                                    $g($uzunluk[$grupNo], $emniyetliYukseklik);
+                                    // echo $value . "<br>";
+                                    a_ret($grupNo);
+                                    $bulundu = true;
+                                    break;
+                                }
                             }
                         }
-
                         if (!$bulundu) {
+                            echo "G0" . $_SESSION["d0_location"] . "Z" . $emniyetliYukseklik . "<br>";
                             a_ret(0);
                         }
                     }
