@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Stajyer Mülakat Sorusu</title>
+    <title>G Kode</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         .durumKutu {
@@ -14,6 +14,10 @@
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
+        }
+
+        .group-div:nth-child(odd) {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -31,7 +35,7 @@
     }
     if (isset($_GET["clear"]) && $_GET["clear"] == true) {
         session_destroy();
-        header("location: /");
+        header("location: ./");
     }
     if (isset($_POST["submit"])) {
         $icerik = $_POST["text"];
@@ -90,7 +94,7 @@
 
         <form method="post" class="container col-sm-6 mt-3">
             <h5>Kaç grup oluşturmak istiyorsunuz?</h5>
-            <input type="number" name="grup_sayi" class="form-control" min="1" max="<?= count($aperture_degerleri); ?>" autofocus>
+            <input type="number" name="grup_sayi" required class="form-control" min="1" max="<?= count($aperture_degerleri); ?>" autofocus>
             <button class="btn btn-primary mt-3" type="submit" name="set_grup_sayi">Grup Sayısını Belirle</button>
         </form>
     <?php }
@@ -107,72 +111,75 @@
                         </div>
                     </div>
                 </div>
+                <hr>
                 <?php for ($i = 1; $i <= $grup_sayi; $i++) { ?>
-                    <h6>Grup D<?= $i; ?> için değerleri seçin:</h6>
-                    <div>
-                        <?php foreach ($aperture_degerleri as $index => $aperture) { ?>
-                            <div class="form-check d-inline-block col-2 mx-3" id="checkbox_Id_<?= $aperture; ?>">
-                                <input onclick="delc(<?= $aperture; ?>)" class="form-check-input aperture-checkbox" type="checkbox"
-                                    name="grup[<?= $i; ?>][]" value="<?= $aperture; ?>"
-                                    id="aperture<?= $i . '-' . $index; ?>" data-aperture="<?= $aperture; ?>">
-                                <label class="form-check-label" for="aperture<?= $i . '-' . $index; ?>">
-                                    <?= $aperture; ?>
-                                </label>
-                            </div>
-                        <?php } ?>
-
+                    <div class="group-div rounded p-3">
+                        <h6>Grup D<?= $i; ?> için değerleri seçin:</h6>
                         <div>
-                            <label class="form-check-label" for="grupDurum<?= $i; ?>">
-                                Çizgi:
-                            </label>
-                            <div class="form-check d-inline-block align-middle">
-                                <input class="form-check-input" type="checkbox" name="grupDurum[<?= $i; ?>]" id="grupDurum<?= $i; ?>">
+                            <?php foreach ($aperture_degerleri as $index => $aperture) { ?>
+                                <div class="form-check d-inline-block col-2 mx-3" id="checkbox_Id_<?= $aperture; ?>">
+                                    <input onclick="delc(<?= $aperture; ?>)" class="form-check-input aperture-checkbox" type="checkbox"
+                                        name="grup[<?= $i; ?>][]" value="<?= $aperture; ?>"
+                                        id="aperture<?= $i . '-' . $index; ?>" data-aperture="<?= $aperture; ?>">
+                                    <label class="form-check-label" for="aperture<?= $i . '-' . $index; ?>">
+                                        <?= $aperture; ?>
+                                    </label>
+                                </div>
+                            <?php } ?>
+
+                            <div>
+                                <label class="form-check-label text-primary" for="grupDurum<?= $i; ?>">
+                                    Çizgi:
+                                </label>
+                                <div class="form-check d-inline-block align-middle">
+                                    <input class="form-check-input" type="checkbox" name="grupDurum[<?= $i; ?>]" id="grupDurum<?= $i; ?>">
+                                </div>
                             </div>
-                        </div>
-                        <div class="durumKutu" id="durumKutuId<?= $i; ?>">
-                            <div class="row border-bottom pb-2">
-                                <div class="col-6">
-                                    <label for="" class="form-label">Uzunluk: </label>
-                                    <div>
-                                        <input type="number" name="uzunluk[<?= $i; ?>]" class="form-control" max="4.99" min="0" step="0.01" value="0" required>
+                            <div class="durumKutu" id="durumKutuId<?= $i; ?>">
+                                <div class="row border-bottom pb-2">
+                                    <div class="col-6">
+                                        <label for="" class="form-label text-primary">Uzunluk: </label>
+                                        <div>
+                                            <input type="number" name="uzunluk[<?= $i; ?>]" class="form-control" max="4.99" min="0" step="0.01" value="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-primary">Açı Değeri:</label>
+                                        <select name="aci_degeri[<?= $i; ?>]" class="form-select" required>
+                                            <option value="0">0 (X)</option>
+                                            <option value="90">90 (Y)</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label">Açı Değeri:</label>
-                                    <select name="aci_degeri[<?= $i; ?>]" class="form-select" required>
-                                        <option value="0">0 (X)</option>
-                                        <option value="90">90 (Y)</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <label class="form-label">Süre Girişi 1:</label>
-                            <input type="number" name="sure1[<?= $i; ?>]" class="form-control">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label text-success">Süre Girişi Bekleme:</label>
+                                <input type="number" name="sure1[<?= $i; ?>]" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label text-danger">Süre Çıkışı Bekleme:</label>
+                                <input type="number" name="sure2[<?= $i; ?>]" class="form-control">
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label">Süre Girişi 2:</label>
-                            <input type="number" name="sure2[<?= $i; ?>]" class="form-control">
-                        </div>
-                    </div>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const durumKutu = document.getElementById('grupDurum<?= $i; ?>');
-                            const durumInput = document.getElementById('durumKutuId<?= $i; ?>');
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const durumKutu = document.getElementById('grupDurum<?= $i; ?>');
+                                const durumInput = document.getElementById('durumKutuId<?= $i; ?>');
 
-                            durumKutu.addEventListener('change', function() {
-                                if (this.checked) {
-                                    durumInput.style.display = 'block';
-                                } else {
-                                    durumInput.style.display = 'none';
-                                }
+                                durumKutu.addEventListener('change', function() {
+                                    if (this.checked) {
+                                        durumInput.style.display = 'block';
+                                    } else {
+                                        durumInput.style.display = 'none';
+                                    }
+                                });
                             });
-                        });
-                    </script>
+                        </script>
+                    </div>
                 <?php } ?>
-                <button class="btn btn-primary" type="submit" name="grupKaydet">Grupları Kaydet</button>
+                <button class="btn btn-primary mt-3" type="submit" name="grupKaydet">Grupları Kaydet</button>
             </form>
         </div>
         <script>
@@ -342,12 +349,14 @@
             if ($sure1[$grupNo] != 0) {
                 echo "G4P" . $sure1[$grupNo] . "<br>";
             }
-            global $aci_degeri;
+            global $aci_degeri, $uzunluk;
             if (isset($aci_degeri) && isset($aci_degeri[$grupNo])) {
-                if ($aci_degeri[$grupNo] == 0) {
-                    echo "X" . $_SESSION["veri_x_bitis"] . "Y" . $_SESSION["veri_y"] . "<br>";
-                } elseif ($aci_degeri[$grupNo] == 90) {
-                    echo "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y_bitis"] . "<br>";
+                if ($uzunluk[$grupNo] > 0) {
+                    if ($aci_degeri[$grupNo] == 0) {
+                        echo "X" . $_SESSION["veri_x_bitis"] . "Y" . $_SESSION["veri_y"] . "<br>";
+                    } elseif ($aci_degeri[$grupNo] == 90) {
+                        echo "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y_bitis"] . "<br>";
+                    }
                 }
             }
             echo "M$dozajKapatKomutu<br>";
@@ -430,7 +439,7 @@
         session_destroy();
     }
     ?>
-    <div class="text-end container col-sm-6 mt-3">
+    <div class="text-end container col-sm-6 mb-3">
         <a class="btn btn-danger" href="?clear=true">Temizle</a>
     </div>
 </body>
