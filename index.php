@@ -301,12 +301,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-6 my-3">
-                                        <label class="form-label">Değişen X Değeri:</label>
-                                        <input type="number" name="x" class="form-control" required>
+                                        <label class="form-label">Ofset X Değeri:</label>
+                                        <input type="number" name="x" class="form-control">
                                     </div>
                                     <div class="col-6 my-3">
-                                        <label class="form-label">Değişen Y Değeri:</label>
-                                        <input type="number" name="y" class="form-control" required>
+                                        <label class="form-label">Ofset Y Değeri:</label>
+                                        <input type="number" name="y" class="form-control">
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Emniyetli Yükseklik:</label>
@@ -421,6 +421,9 @@
                     }
                 }
                 echo "M$dozajKapatKomutu<br>";
+                if ($grupNo != 0) {
+                    echo "G4P" . $sure2[$grupNo] . "<br>";
+                }
                 echo "G0Z$emniyetliYukseklik<br>";
                 if ($grupNo != 0) {
                     if ($sure2[$grupNo] != 0) {
