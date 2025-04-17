@@ -248,6 +248,7 @@
                                                             type="number"
                                                             name="uzunluk[<?= $i; ?>]"
                                                             class="form-control"
+                                                            id="durumUzunlukId<?= $i; ?>"
                                                             max="4.99"
                                                             min="0"
                                                             step="0.01">
@@ -298,6 +299,7 @@
                                                 if (this.checked) {
                                                     durumInput.style.display = 'block';
                                                 } else {
+                                                    document.getElementById('durumUzunlukId<?= $i; ?>').value = 0;
                                                     durumInput.style.display = 'none';
                                                 }
                                             });
@@ -411,7 +413,7 @@
                                     <label class="form-label">Açıklama:</label>
                                     <input value="<?php
                                                     if ($edit) {
-                                                        echo $icerik["aciklama"];
+                                                        echo $icerik["aciklama"] . "_Copy";
                                                     }
                                                     ?>" type="text" name="aciklama" class="form-control" autofocus autocomplete="off">
                                 </div>
@@ -541,8 +543,10 @@
             $emniyetliYukseklik = $_SESSION["bilgi"]["emniyetliYukseklik"] = str_replace(",", ".", $_POST["emniyetliYukseklik"]);
             //$g00Hiz = $_POST["g00Hiz"];
             $g01Hiz = $_SESSION["bilgi"]["g01Hiz"] = $_POST["g01Hiz"];
-            if (isset($_SESSION["veri_array"])) {
-                $veri_array = $_SESSION["veri_array"];
+            if ($edit) {
+                $veri_array = $icerik["veri_array"];
+            } else {
+                $veri_array = $_SESSION["bilgi"]["veri_array"] = $_SESSION["veri_array"];
             }
             if (isset($_SESSION["aci_degeri"]) && isset($_SESSION["uzunluk"])) {
                 $aci_degeri = $_SESSION["aci_degeri"];
@@ -551,17 +555,17 @@
             $homeXKordinati = $_SESSION["bilgi"]["homeXKordinati"] = str_replace(",", ".", $_POST["homeXKordinati"]);
             $homeYKordinati = $_SESSION["bilgi"]["homeYKordinati"] = str_replace(",", ".", $_POST["homeYKordinati"]);
             $homeZKordinati = $_SESSION["bilgi"]["homeZKordinati"] = str_replace(",", ".", $_POST["homeZKordinati"]);
-           
+
             $_SESSION["bilgi"]["emniyetliYukseklik"] = $_POST["emniyetliYukseklik"];
             $_SESSION["bilgi"]["dozajAcKomutu"] = $_POST["dozajAcKomutu"];
             $_SESSION["bilgi"]["dozajKapatKomutu"] = $_POST["dozajKapatKomutu"];
             $_SESSION["bilgi"]["islemYuksekligi"] = str_replace(",", ".", $_POST["islemYuksekligi"]);
             function a_ret($grupNo)
             {
-                $emniyetliYukseklik = $_SESSION["bilgi"]["emniyetliYukseklik"] = $_POST["emniyetliYukseklik"];
-                $dozajAcKomutu = $_SESSION["bilgi"]["dozajAcKomutu"] = $_POST["dozajAcKomutu"];
-                $dozajKapatKomutu = $_SESSION["bilgi"]["dozajKapatKomutu"] = $_POST["dozajKapatKomutu"];
-                $islemYuksekligi = $_SESSION["bilgi"]["islemYuksekligi"] = str_replace(",", ".", $_POST["islemYuksekligi"]);
+                $emniyetliYukseklik = $_POST["emniyetliYukseklik"];
+                $dozajAcKomutu = $_POST["dozajAcKomutu"];
+                $dozajKapatKomutu = $_POST["dozajKapatKomutu"];
+                $islemYuksekligi = str_replace(",", ".", $_POST["islemYuksekligi"]);
                 $sure1 = $_SESSION["bilgi"]["sure1"] = $_SESSION['sure1'];
                 $sure2 = $_SESSION["bilgi"]["sure2"] = $_SESSION['sure2'];
                 // echo $value . "<br>";
@@ -680,6 +684,10 @@
             //echo "G0F$g00Hiz" . "<br>";
             echo "G1F" . $g01Hiz . "<br>";
             echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br><br>";
+
+            if ($edit) {
+                $veri_array = $icerik["veri_array"];
+            }
 
             foreach ($veri_array as $index => $item) {
                 if ($index == 0) {
