@@ -6,41 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>G KOD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        .durumKutu {
-            display: none;
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-
-        .group-div:nth-child(odd) {
-            /* box-shadow: var(--bs-box-shadow-lg) !important; */
-            background-color: #f2f2f2;
-        }
-
-        .group-div:nth-child(even) {
-            box-shadow: var(--bs-box-shadow) !important;
-        }
-
-        .nav-item-hover {
-            transition: 0.2s ease;
-        }
-
-        .nav-item-hover:hover {
-            color: darkblue;
-            font-weight: bolder;
-            font-size: 18px;
-        }
-    </style>
 </head>
 
 <body>
     <div>
         <div class="col-sm-3">
             <?php
+            date_default_timezone_set('Europe/Istanbul');
             session_start();
             include "navbar.php";
             ?>
@@ -57,8 +29,9 @@
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item<?= $key ?>"
                                         aria-expanded="false" aria-controls="item<?= $key ?>">
-                                        <?= $value["aciklama"] . " - " . $value["zaman"]; ?>
-                                    </button> 
+                                        <?= !empty($value["aciklama"]) ? $value["aciklama"] : "G-Kod"; ?>
+                                        <?=  " - " . $value["zaman"]; ?>
+                                    </button>
                                 </h2>
                                 <div id="item<?= $key ?>" class="accordion-collapse collapse" data-bs-parent="#gecmis">
                                     <div class="accordion-body">

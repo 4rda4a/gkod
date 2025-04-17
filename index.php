@@ -40,6 +40,7 @@
 <body>
     <div>
         <?php
+        date_default_timezone_set('Europe/Istanbul');
         session_start();
         if (empty($_SESSION["gizle"])) {
             $_SESSION["gizle"] = false;
@@ -68,8 +69,9 @@
             $edit = true;
             $_SESSION["gizle"] = true;
             $icerik = $_SESSION["icerik"][$_GET["edit"]];
+            $_SESSION["gizle2"] = "OK";
         } else {
-            $edit = false;
+            $edit = $_SESSION["gizle2"] = false;
         }
         if (isset($_POST["submit"])) {
             $icerik = $_POST["text"];
@@ -111,6 +113,8 @@
         }
         if ($_SERVER["REQUEST_METHOD"] != "POST") {
             $_SESSION["gizle"] = false;
+        } else {
+            $_SESSION["gizle2"] = "NO";
         }
         if ($_SESSION["gizle"] == false && !$edit) {
         ?>
@@ -138,9 +142,13 @@
                 </div>
             </form>
         <?php }
-        if ($grup_sayi > 0 && !empty($aperture_degerleri) || $edit) {
+        if (
+            $grup_sayi > 0 && !empty($aperture_degerleri) || $_SESSION["gizle2"] === "OK"
+        ) {
+            $_SESSION["gizle2"] = "NO";
             if ($edit) {
                 $grup_sayi = $icerik["grup_sayi"];
+                $_SESSION["bilgi"]["grup_sayi"] = $grup_sayi;
             }
         ?>
             <div class="container col-sm-8 mt-5 pt-5">
@@ -150,6 +158,28 @@
                         <form method="post">
                             <div>
                                 <h6>Grup D0 (●) için süre seçimi:</h6>
+                                <div>
+                                    <?php
+                                    if ($edit) {
+                                        $aperture_degerleri = $icerik["seciliGrup"][0];
+                                        foreach ($aperture_degerleri as $index => $aperture) { ?>
+                                            <div class="form-check d-inline-block col-2 mx-3" id="checkbox_Id_<?= $aperture; ?>">
+                                                <input class="form-check-input aperture-checkbox" type="checkbox"
+                                                    name="grup[0][]" value="<?= $aperture; ?>"
+                                                    id="aperture0-<?= $aperture ?>" data-aperture="<?= $aperture; ?>"
+                                                    <?php
+                                                    if ($edit) {
+                                                        echo "checked";
+                                                    }
+                                                    ?>>
+                                                <label class="form-check-label" for="aperture0-<?= $aperture ?>">
+                                                    <?= $aperture; ?>
+                                                </label>
+                                            </div>
+                                    <?php }
+                                    }
+                                    ?>
+                                </div>
                                 <div class="row mb-3">
                                     <div class="">
                                         <label class="form-label text-success">Giriş Süresi Bekleme:</label>
@@ -172,7 +202,12 @@
                                             <div class="form-check d-inline-block col-2 mx-3" id="checkbox_Id_<?= $aperture; ?>">
                                                 <input class="form-check-input aperture-checkbox" type="checkbox"
                                                     name="grup[<?= $i; ?>][]" value="<?= $aperture; ?>"
-                                                    id="aperture<?= $i . '-' . $index; ?>" data-aperture="<?= $aperture; ?>">
+                                                    id="aperture<?= $i . '-' . $index; ?>" data-aperture="<?= $aperture; ?>"
+                                                    <?php
+                                                    if ($edit) {
+                                                        echo "checked";
+                                                    }
+                                                    ?>>
                                                 <label class="form-check-label" for="aperture<?= $i . '-' . $index; ?>">
                                                     <?= $aperture; ?>
                                                 </label>
@@ -184,22 +219,53 @@
                                                 Çizgi ( <span style="font-weight: bold; color: #000;">|</span> )
                                             </label>
                                             <div class="form-check d-inline-block align-middle">
-                                                <input class="form-check-input" type="checkbox" name="grupDurum[<?= $i; ?>]" id="grupDurum<?= $i; ?>">
+                                                <input
+                                                    <?php
+                                                    if ($edit && $icerik["uzunluk"][$i] > 0) {
+                                                        echo "checked";
+                                                    }
+                                                    ?>
+                                                    class="form-check-input" type="checkbox" name="grupDurum[<?= $i; ?>]" id="grupDurum<?= $i; ?>">
                                             </div>
                                         </div>
-                                        <div class="durumKutu" id="durumKutuId<?= $i; ?>">
+                                        <div
+                                            <?php
+                                            if ($edit && $icerik["uzunluk"][$i] > 0) {
+                                                echo "style='display: block;'";
+                                            }
+                                            ?> class="durumKutu" id="durumKutuId<?= $i; ?>">
                                             <div class="row border-bottom pb-2">
                                                 <div class="col-6">
                                                     <label for="" class="form-label text-primary">Uzunluk: </label>
                                                     <div>
-                                                        <input type="number" name="uzunluk[<?= $i; ?>]" class="form-control" max="4.99" min="0" step="0.01" value="0" required>
+                                                        <input value="<?php
+                                                                        if ($edit) {
+                                                                            echo $icerik["uzunluk"][$i];
+                                                                        } else {
+                                                                            echo 0;
+                                                                        }
+                                                                        ?>"
+                                                            type="number"
+                                                            name="uzunluk[<?= $i; ?>]"
+                                                            class="form-control"
+                                                            max="4.99"
+                                                            min="0"
+                                                            step="0.01">
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label text-primary">Açı Değeri:</label>
-                                                    <select name="aci_degeri[<?= $i; ?>]" class="form-select" required>
-                                                        <option value="0">0 (X)</option>
-                                                        <option value="90">90 (Y)</option>
+                                                    <select name="aci_degeri[<?= $i; ?>]" class="form-select">
+                                                        <option <?php
+                                                                if ($edit && $icerik["aci_degeri"][$i] == 0) {
+                                                                    echo "selected";
+                                                                }
+                                                                ?> value="0">0 (X)</option>
+                                                        <option <?php
+                                                                if ($edit && $icerik["aci_degeri"][$i] == 90) {
+                                                                    echo "selected";
+                                                                }
+                                                                ?> value="90">90 (Y)</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -208,11 +274,19 @@
                                     <div class="row mb-3">
                                         <div class="col-6">
                                             <label class="form-label text-success">Giriş Süresi Bekleme:</label>
-                                            <input type="number" name="sure1[<?= $i; ?>]" class="form-control">
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["sure1"][$i];
+                                                            }
+                                                            ?>" type="number" name="sure1[<?= $i; ?>]" class="form-control">
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label text-danger">Çıkış Süresi Bekleme:</label>
-                                            <input type="number" name="sure2[<?= $i; ?>]" class="form-control">
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["sure2"][$i];
+                                                            }
+                                                            ?>" type="number" name="sure2[<?= $i; ?>]" class="form-control">
                                         </div>
                                     </div>
                                     <script>
@@ -264,8 +338,10 @@
                     });
                 });
             </script>
-        <?php }
-        if (isset($_POST['grupKaydet']) && isset($_POST['grup'])) {
+        <?php
+        }
+        if (isset($_POST['grupKaydet']) && isset($_POST['grup']) && $_SESSION["gizle"]) {
+            $_SESSION["gizle2"] = "NO";
             $seciliGrup = $_POST['grup'];
             $d0_ = [];
             $_SESSION['seciliGrup'] = $_SESSION['bilgi']['seciliGrup'] = $seciliGrup;
@@ -333,43 +409,71 @@
                             <div class="card-body">
                                 <div>
                                     <label class="form-label">Açıklama:</label>
-                                    <input type="text" name="aciklama" class="form-control" autofocus autocomplete="off">
+                                    <input value="<?php
+                                                    if ($edit) {
+                                                        echo $icerik["aciklama"];
+                                                    }
+                                                    ?>" type="text" name="aciklama" class="form-control" autofocus autocomplete="off">
                                 </div>
                                 <div class="row">
                                     <div class="col-6 my-3">
                                         <label class="form-label">Ofset X Değeri:</label>
-                                        <input type="number" name="x" class="form-control" step="0.01">
+                                        <input value="<?php
+                                                        if ($edit) {
+                                                            echo $icerik["x"];
+                                                        }
+                                                        ?>" type="number" name="x" class="form-control" step="0.01">
                                     </div>
                                     <div class="col-6 my-3">
                                         <label class="form-label">Ofset Y Değeri:</label>
-                                        <input type="number" name="y" class="form-control" step="0.01">
+                                        <input value="<?php
+                                                        if ($edit) {
+                                                            echo $icerik["y"];
+                                                        }
+                                                        ?>" type="number" name="y" class="form-control" step="0.01">
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Emniyetli Yükseklik:</label>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Z</span>
-                                            <input type="number" name="emniyetliYukseklik" class="form-control" required step="0.01">
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["emniyetliYukseklik"];
+                                                            }
+                                                            ?>" type="number" name="emniyetliYukseklik" class="form-control" required step="0.01">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">İşlem Yüksekliği:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">Z</span>
-                                            <input type="number" name="islemYuksekligi" class="form-control" required step="0.01">
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["islemYuksekligi"];
+                                                            }
+                                                            ?>" type="number" name="islemYuksekligi" class="form-control" required step="0.01">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Dozaj Aç Komutu:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">M</span>
-                                            <input type="number" name="dozajAcKomutu" class="form-control" required>
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["dozajAcKomutu"];
+                                                            }
+                                                            ?>" type="number" name="dozajAcKomutu" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Dozaj Kapat Komutu:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">M</span>
-                                            <input type="number" name="dozajKapatKomutu" class="form-control" required>
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["dozajKapatKomutu"];
+                                                            }
+                                                            ?>" type="number" name="dozajKapatKomutu" class="form-control" required>
                                         </div>
                                     </div>
                                     <!--<div class="col-6">
@@ -383,20 +487,36 @@
                                         <label class="form-label">G1 Hız:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">F</span>
-                                            <input type="number" name="g01Hiz" class="form-control" required>
+                                            <input value="<?php
+                                                            if ($edit) {
+                                                                echo $icerik["g01Hiz"];
+                                                            }
+                                                            ?>" type="number" name="g01Hiz" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home X Kordinatı:</label>
-                                        <input type="number" name="homeXKordinati" class="form-control" required step="0.01">
+                                        <input value="<?php
+                                                        if ($edit) {
+                                                            echo $icerik["homeXKordinati"];
+                                                        }
+                                                        ?>" type="number" name="homeXKordinati" class="form-control" required step="0.01">
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home Y Kordinatı:</label>
-                                        <input type="number" name="homeYKordinati" class="form-control" required step="0.01">
+                                        <input value="<?php
+                                                        if ($edit) {
+                                                            echo $icerik["homeYKordinati"];
+                                                        }
+                                                        ?>" type="number" name="homeYKordinati" class="form-control" required step="0.01">
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home Z Kordinatı:</label>
-                                        <input type="number" name="homeZKordinati" class="form-control" required step="0.01">
+                                        <input value="<?php
+                                                        if ($edit) {
+                                                            echo $icerik["homeZKordinati"];
+                                                        }
+                                                        ?>" type="number" name="homeZKordinati" class="form-control" required step="0.01">
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -431,6 +551,11 @@
             $homeXKordinati = $_SESSION["bilgi"]["homeXKordinati"] = str_replace(",", ".", $_POST["homeXKordinati"]);
             $homeYKordinati = $_SESSION["bilgi"]["homeYKordinati"] = str_replace(",", ".", $_POST["homeYKordinati"]);
             $homeZKordinati = $_SESSION["bilgi"]["homeZKordinati"] = str_replace(",", ".", $_POST["homeZKordinati"]);
+           
+            $_SESSION["bilgi"]["emniyetliYukseklik"] = $_POST["emniyetliYukseklik"];
+            $_SESSION["bilgi"]["dozajAcKomutu"] = $_POST["dozajAcKomutu"];
+            $_SESSION["bilgi"]["dozajKapatKomutu"] = $_POST["dozajKapatKomutu"];
+            $_SESSION["bilgi"]["islemYuksekligi"] = str_replace(",", ".", $_POST["islemYuksekligi"]);
             function a_ret($grupNo)
             {
                 $emniyetliYukseklik = $_SESSION["bilgi"]["emniyetliYukseklik"] = $_POST["emniyetliYukseklik"];
