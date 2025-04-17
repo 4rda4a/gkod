@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark" data-bs-thema="dark">
     <form method="" action="" class="card col-sm-4 m-auto mt-5">
         <div class="card-header text-center bg-dark text-white">
             <img src="http://siltronics.net/assets/images/resimler/yeniLogo.svg" width="40%">
@@ -19,11 +19,11 @@
         <div class="card-body bg-dark text-white">
             <div class="mb-3">
                 <label for="tcKimlik" class="form-label m-0">TC Kimlik No:</label>
-                <input type="email" class="form-control" autofocus id="TcKimlik">
+                <input type="email" class="form-control text-white bg-transparent" autofocus id="TcKimlik">
             </div>
             <div class="mb-3">
                 <label for="Sifre" class="form-label m-0">Şifre</label>
-                <input type="password" class="form-control" id="Sifre">
+                <input type="password" class="form-control text-white bg-transparent" id="Sifre">
             </div>
             <div class="text-center">
                 <!-- <button type="submit" class="btn btn-primary col-sm-4">Giriş</button> -->

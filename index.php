@@ -37,13 +37,21 @@
     </style>
 </head>
 
-<body class="">
+<body>
     <div>
         <?php
         session_start();
+        if (empty($_SESSION["gizle"])) {
+            $_SESSION["gizle"] = false;
+        }
         if (isset($_GET["clear"]) && $_GET["clear"] == true) {
-            session_destroy();
-            // header("location: http://siltronics.net/gkod/");
+            $temp = $_SESSION['icerik'] ?? null;
+            session_unset();
+            if ($temp !== null) {
+                $_SESSION['icerik'] = $temp;
+            }
+            //session_destroy();
+            //header("location: http://siltronics.net/gkod/");
             header("location: ./");
         }
         echo '<div class="col-sm-3">';
@@ -55,6 +63,13 @@
         $grup_sayi = 0;
         if (isset($_SESSION['aperture_degerleri'])) {
             $aperture_degerleri = $_SESSION['aperture_degerleri'];
+        }
+        if (isset($_GET["edit"])) {
+            $edit = true;
+            $_SESSION["gizle"] = true;
+            $icerik = $_SESSION["icerik"][$_GET["edit"]];
+        } else {
+            $edit = false;
         }
         if (isset($_POST["submit"])) {
             $icerik = $_POST["text"];
@@ -92,30 +107,42 @@
                 }
             }
             $_SESSION['aperture_degerleri'] = $aperture_degerleri;
+            $_SESSION["gizle"] = true;
         }
-        if (empty($veri_array) && empty($aperture_degerleri)) {
+        if ($_SERVER["REQUEST_METHOD"] != "POST") {
+            $_SESSION["gizle"] = false;
+        }
+        if ($_SESSION["gizle"] == false && !$edit) {
         ?>
             <form method="post" class="container col-sm-8 mt-5 pt-5">
                 <h5>İçerik Girişi</h5>
                 <textarea name="text" class="form-control shadow-lg" rows="10" required></textarea>
                 <button class="btn btn-primary mt-3 col-sm-4" type="submit" name="submit">İleri</button>
             </form>
-        <?php }
+        <?php
+        }
         if (isset($_POST['set_grup_sayi'])) {
             $grup_sayi = (int)$_POST['grup_sayi'];
+            $_SESSION["bilgi"]["grup_sayi"] = $grup_sayi;
+            $_SESSION["gizle"] = true;
         } ?>
-        <?php if (!empty($aperture_degerleri) && isset($_POST["submit"])) { ?>
+        <?php if (!empty($aperture_degerleri) && isset($_POST["submit"])) {
+        ?>
             <form method="post" class="container col-sm-8 mt-5 pt-5">
                 <div class="card mt-5 shadow-lg">
                     <div class="card-body">
                         <h5>Kaç grup oluşturmak istiyorsunuz?</h5>
-                        <input type="number" placeholder="Maks: <?= count($aperture_degerleri); ?>" name="grup_sayi" required class="form-control" min="1" max="<?= count($aperture_degerleri); ?>" autofocus>
+                        <input type="number" value="" placeholder="Maks: <?= count($aperture_degerleri); ?>" name="grup_sayi" required class="form-control" min="1" max="<?= count($aperture_degerleri); ?>" autofocus>
                         <button class="btn btn-primary mt-3 col-sm-4" type="submit" name="set_grup_sayi">İleri</button>
                     </div>
                 </div>
             </form>
         <?php }
-        if ($grup_sayi > 0 && !empty($aperture_degerleri)) { ?>
+        if ($grup_sayi > 0 && !empty($aperture_degerleri) || $edit) {
+            if ($edit) {
+                $grup_sayi = $icerik["grup_sayi"];
+            }
+        ?>
             <div class="container col-sm-8 mt-5 pt-5">
                 <div class="card shadow-lg">
                     <div class="card-body">
@@ -126,7 +153,9 @@
                                 <div class="row mb-3">
                                     <div class="">
                                         <label class="form-label text-success">Giriş Süresi Bekleme:</label>
-                                        <input autofocus type="number" name="sure1[0]" class="form-control">
+                                        <input autofocus type="number" value="<?php if ($edit) {
+                                                                                    echo $icerik["sure1"][0];
+                                                                                } ?>" name="sure1[0]" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -135,9 +164,13 @@
                                 <div class="group-div rounded p-3">
                                     <h6>Grup D<?= $i; ?> için değerleri seçin:</h6>
                                     <div>
-                                        <?php foreach ($aperture_degerleri as $index => $aperture) { ?>
+                                        <?php
+                                        if ($edit) {
+                                            $aperture_degerleri = $icerik["seciliGrup"][$i];
+                                        }
+                                        foreach ($aperture_degerleri as $index => $aperture) { ?>
                                             <div class="form-check d-inline-block col-2 mx-3" id="checkbox_Id_<?= $aperture; ?>">
-                                                <input onclick="delc(<?= $aperture; ?>)" class="form-check-input aperture-checkbox" type="checkbox"
+                                                <input class="form-check-input aperture-checkbox" type="checkbox"
                                                     name="grup[<?= $i; ?>][]" value="<?= $aperture; ?>"
                                                     id="aperture<?= $i . '-' . $index; ?>" data-aperture="<?= $aperture; ?>">
                                                 <label class="form-check-label" for="aperture<?= $i . '-' . $index; ?>">
@@ -202,7 +235,7 @@
                             <?php } ?>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <button class="btn btn-primary col-sm-8" type="submit" name="grupKaydet">Grupları Kaydet</button>
+                                    <button class="btn btn-primary col-sm-8" type="submit" name="grupKaydet">Kaydet</button>
                                 </div>
 
                                 <div class="text-end container col-sm-6">
@@ -235,13 +268,14 @@
         if (isset($_POST['grupKaydet']) && isset($_POST['grup'])) {
             $seciliGrup = $_POST['grup'];
             $d0_ = [];
-            $_SESSION['seciliGrup'] = $seciliGrup;
-            $_SESSION['sure1'] = $_POST['sure1'];
-            $_SESSION['sure2'] = $_POST['sure2'];
+            $_SESSION['seciliGrup'] = $_SESSION['bilgi']['seciliGrup'] = $seciliGrup;
+            $_SESSION['sure1'] = $_SESSION['bilgi']['sure1'] = $_POST['sure1'];
+            $_SESSION['sure2'] = $_SESSION['bilgi']['sure2'] = $_POST['sure2'];
             $_SESSION['d0_sure1'] = $_POST['sure1'][0];
 
-            $_SESSION['uzunluk'] = $_POST['uzunluk'];
-            $_SESSION['aci_degeri'] = $_POST['aci_degeri'];
+            $_SESSION['uzunluk'] = $_SESSION['bilgi']['uzunluk'] = $_POST['uzunluk'];
+            $_SESSION['aci_degeri'] = $_SESSION['bilgi']['aci_degeri'] = $_POST['aci_degeri'];
+            $_SESSION['d0_'] = [];
             foreach ($aperture_degerleri as $aperture) {
                 $durum = false;
                 foreach ($seciliGrup as $grup) {
@@ -252,6 +286,8 @@
                 }
                 if (!$durum) {
                     $d0_[] = $aperture;
+                    $_SESSION['d0_'][] = $aperture;
+                    $_SESSION['bilgi']['seciliGrup'][0][] = $aperture;
                 }
             }
         ?>
@@ -302,24 +338,24 @@
                                 <div class="row">
                                     <div class="col-6 my-3">
                                         <label class="form-label">Ofset X Değeri:</label>
-                                        <input type="number" name="x" class="form-control">
+                                        <input type="number" name="x" class="form-control" step="0.01">
                                     </div>
                                     <div class="col-6 my-3">
                                         <label class="form-label">Ofset Y Değeri:</label>
-                                        <input type="number" name="y" class="form-control">
+                                        <input type="number" name="y" class="form-control" step="0.01">
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Emniyetli Yükseklik:</label>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Z</span>
-                                            <input type="number" name="emniyetliYukseklik" class="form-control" required>
+                                            <input type="number" name="emniyetliYukseklik" class="form-control" required step="0.01">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">İşlem Yüksekliği:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">Z</span>
-                                            <input type="number" name="islemYuksekligi" class="form-control" required>
+                                            <input type="number" name="islemYuksekligi" class="form-control" required step="0.01">
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -336,15 +372,15 @@
                                             <input type="number" name="dozajKapatKomutu" class="form-control" required>
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <!--<div class="col-6">
                                         <label class="form-label">G00 Hız:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">F</span>
                                             <input type="number" name="g00Hiz" class="form-control" required>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">G01 Hız:</label>
+                                    </div>-->
+                                    <div class="col-12">
+                                        <label class="form-label">G1 Hız:</label>
                                         <div class="input-group mb-3 col-6">
                                             <span class="input-group-text">F</span>
                                             <input type="number" name="g01Hiz" class="form-control" required>
@@ -352,15 +388,15 @@
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home X Kordinatı:</label>
-                                        <input type="number" name="homeXKordinati" class="form-control" required>
+                                        <input type="number" name="homeXKordinati" class="form-control" required step="0.01">
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home Y Kordinatı:</label>
-                                        <input type="number" name="homeYKordinati" class="form-control" required>
+                                        <input type="number" name="homeYKordinati" class="form-control" required step="0.01">
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">Home Z Kordinatı:</label>
-                                        <input type="number" name="homeZKordinati" class="form-control" required>
+                                        <input type="number" name="homeZKordinati" class="form-control" required step="0.01">
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -379,12 +415,12 @@
         <?php
         }
         if (isset($_POST['bilgiKaydet'])) {
-            $aciklama = $_POST["aciklama"];
-            $x = $_POST["x"];
-            $y = $_POST["y"];
-            $emniyetliYukseklik = $_POST["emniyetliYukseklik"];
-            $g00Hiz = $_POST["g00Hiz"];
-            $g01Hiz = $_POST["g01Hiz"];
+            $aciklama = $_SESSION["bilgi"]["aciklama"] = $_POST["aciklama"];
+            $x = $_SESSION["bilgi"]["x"] = str_replace(",", ".", $_POST["x"]);
+            $y = $_SESSION["bilgi"]["y"] = str_replace(",", ".", $_POST["y"]);
+            $emniyetliYukseklik = $_SESSION["bilgi"]["emniyetliYukseklik"] = str_replace(",", ".", $_POST["emniyetliYukseklik"]);
+            //$g00Hiz = $_POST["g00Hiz"];
+            $g01Hiz = $_SESSION["bilgi"]["g01Hiz"] = $_POST["g01Hiz"];
             if (isset($_SESSION["veri_array"])) {
                 $veri_array = $_SESSION["veri_array"];
             }
@@ -392,17 +428,17 @@
                 $aci_degeri = $_SESSION["aci_degeri"];
                 $uzunluk = $_SESSION["uzunluk"];
             }
-            $homeXKordinati = $_POST["homeXKordinati"];
-            $homeYKordinati = $_POST["homeYKordinati"];
-            $homeZKordinati = $_POST["homeZKordinati"];
+            $homeXKordinati = $_SESSION["bilgi"]["homeXKordinati"] = str_replace(",", ".", $_POST["homeXKordinati"]);
+            $homeYKordinati = $_SESSION["bilgi"]["homeYKordinati"] = str_replace(",", ".", $_POST["homeYKordinati"]);
+            $homeZKordinati = $_SESSION["bilgi"]["homeZKordinati"] = str_replace(",", ".", $_POST["homeZKordinati"]);
             function a_ret($grupNo)
             {
-                $emniyetliYukseklik = $_POST["emniyetliYukseklik"];
-                $dozajAcKomutu = $_POST["dozajAcKomutu"];
-                $dozajKapatKomutu = $_POST["dozajKapatKomutu"];
-                $islemYuksekligi = $_POST["islemYuksekligi"];
-                $sure1 = $_SESSION['sure1'];
-                $sure2 = $_SESSION['sure2'];
+                $emniyetliYukseklik = $_SESSION["bilgi"]["emniyetliYukseklik"] = $_POST["emniyetliYukseklik"];
+                $dozajAcKomutu = $_SESSION["bilgi"]["dozajAcKomutu"] = $_POST["dozajAcKomutu"];
+                $dozajKapatKomutu = $_SESSION["bilgi"]["dozajKapatKomutu"] = $_POST["dozajKapatKomutu"];
+                $islemYuksekligi = $_SESSION["bilgi"]["islemYuksekligi"] = str_replace(",", ".", $_POST["islemYuksekligi"]);
+                $sure1 = $_SESSION["bilgi"]["sure1"] = $_SESSION['sure1'];
+                $sure2 = $_SESSION["bilgi"]["sure2"] = $_SESSION['sure2'];
                 // echo $value . "<br>";
 
                 echo "G1Z$islemYuksekligi" . "<br>";
@@ -431,7 +467,7 @@
                     }
                 }
             }
-            function kordinatHesap($value, $x, $y, $emniyetliYukseklik)
+            function kordinatHesap($value, $x, $y, $emniyetliYukseklik, $gDurum)
             {
                 $kordinat = $value;
                 preg_match('/X([\d.]+)Y([\d.]+)/', $kordinat, $cikti);
@@ -443,26 +479,64 @@
                 if (!function_exists('aci_0')) {
                     function aci_0($uzunluk, $emniyetliYukseklik)
                     {
-                        global $veri_x, $veri_y;
+                        global $veri_x, $veri_y, $gDurum;
                         $_SESSION["veri_x_baslangic"] = $veri_x_baslangic = $_SESSION["veri_x"] - ($uzunluk / 2);
                         $_SESSION["veri_x_bitis"] = $veri_x_bitis = $_SESSION["veri_x"] + ($uzunluk / 2);
-                        echo "G0X" . $veri_x_baslangic . "Y" . $_SESSION["veri_y"] . "Z" . $emniyetliYukseklik . "<br>";
+                        echo "G" . $gDurum . "X" . $veri_x_baslangic . "Y" . $_SESSION["veri_y"] . "Z" . $emniyetliYukseklik . "<br>";
                     }
                 }
                 if (!function_exists('aci_90')) {
                     function aci_90($uzunluk, $emniyetliYukseklik)
                     {
-                        global $veri_x, $veri_y;
+                        global $veri_x, $veri_y, $gDurum;
                         $_SESSION["veri_y_baslangic"] = $veri_y_baslangic = $_SESSION["veri_y"] - ($uzunluk / 2);
                         $_SESSION["veri_y_bitis"] = $veri_y_bitis = $_SESSION["veri_y"] + ($uzunluk / 2);
-                        echo "G0X" . $_SESSION["veri_x"] . "Y" . $veri_y_baslangic . "Z" . $emniyetliYukseklik . "<br>";
+                        echo "G" . $gDurum . "X" . $_SESSION["veri_x"] . "Y" . $veri_y_baslangic . "Z" . $emniyetliYukseklik . "<br>";
                     }
                 }
                 // echo "X" . $veri_x . "Y" . $veri_y . "Z" . $emniyetliYukseklik . "<br>";
             } ?>
-            <button id="copy_btn" class="btn btn-outline-primary col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
-            <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
+            <a onclick="dosyayaYaz()" class="btn btn-outline-primary mb-3" style="position: fixed;right: 5%;top: 16%;">İndir</a>
+            <button id="copy_btn" class="btn btn-outline-success" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
+            <a href="?clear=true" class="btn btn-outline-secondary" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
             <script>
+                function gonder() {
+                    const yazi = document.getElementById("kopyala").innerText;
+
+                    fetch("index.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: "veri=" + encodeURIComponent(yazi)
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Session'a kaydedildi: " + data);
+                        });
+                }
+
+                function dosyayaYaz() {
+                    const icerik = document.getElementById("kopyala").innerText;
+
+                    const blob = new Blob([icerik], {
+                        type: "text/plain;charset=utf-8"
+                    });
+                    const url = URL.createObjectURL(blob);
+
+                    var aciklama = "<?= $aciklama; ?>";
+                    if (aciklama == "") {
+                        aciklama = "gkod";
+                    }
+
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = aciklama + ".tap";
+                    a.click();
+
+                    URL.revokeObjectURL(url);
+                }
+
                 function metniKopyala() {
                     let metin = document.getElementById("kopyala").innerText;
                     let textarea = document.createElement("textarea");
@@ -478,12 +552,19 @@
         <?php
             echo "<pre class='container col-sm-5 fs-6 mt-5 pt-2 border rounded shadow-lg ps-4' id='kopyala' style='font-size: 0.8rem!important;'>";
             echo "($aciklama)<br>";
-            echo "G0F$g00Hiz" . "<br>";
-            echo "G01F" . $g01Hiz . "<br><br>";
+            //echo "G0F$g00Hiz" . "<br>";
+            echo "G1F" . $g01Hiz . "<br>";
+            echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br><br>";
+
             foreach ($veri_array as $index => $item) {
+                if ($index == 0) {
+                    $gDurum = 0;
+                } else {
+                    $gDurum = 1;
+                }
                 foreach ($item as $key => $value) {
                     if ($key == "Location") {
-                        kordinatHesap($value, $x, $y, $emniyetliYukseklik);
+                        kordinatHesap($value, $x, $y, $emniyetliYukseklik, $gDurum);
                     }
                 }
                 foreach ($item as $key => $value) {
@@ -506,7 +587,7 @@
                                 }
                             }
                             if (!$bulundu) {
-                                echo "G0" . $_SESSION["d0_location"] . "Z" . $emniyetliYukseklik . "<br>";
+                                echo "G" . $gDurum . $_SESSION["d0_location"] . "Z" . $emniyetliYukseklik . "<br>";
                                 a_ret(0);
                             }
                         }
@@ -515,12 +596,39 @@
                 echo "<br>";
             }
             global $homeXKordinati, $homeYKordinati, $homeZKordinati;
-            echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati;
+            echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br>";
+            echo "M30";
             echo "</pre>";
-            session_destroy();
         }
         ?>
     </div>
+    <?php
+    if (isset($_POST['veri'])) {
+        $yeniVeri = $_POST['veri'];
+
+        if (!isset($_SESSION['icerik']) || !is_array($_SESSION['icerik'])) {
+            $_SESSION['icerik'] = [];
+        }
+        $_SESSION["bilgi"]["zaman"] = date("d.m.Y H:i:s");
+        $bilgi = $_SESSION['bilgi'];
+        $_SESSION['icerik'][] = array_merge(
+            ['cikti' => $yeniVeri],
+            $bilgi
+        );
+
+        //En son çıktıyı ekrenda gösterdiğimizde sessiondaki gerekli verileri siliyoruz
+        $_SESSION["gizle"] = true;
+        $temp = $_SESSION['icerik'] ?? null;
+        session_unset();
+        if ($temp !== null) {
+            $_SESSION['icerik'] = $temp;
+        }
+    }
+    ?>
+    <script>
+        document.getElementById("home-collapse").classList.add("show");
+        gonder();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

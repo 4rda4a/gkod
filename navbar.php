@@ -74,6 +74,9 @@
                                 <a href="index.php" class="nav-bot-item card-body">Anasayfa</a>
                             </li>
                             <li class="card dropdown-menu my-2 button-hover">
+                                <a href="past.php" class="nav-bot-item">Geçmiş</a>
+                            </li>
+                            <li class="card dropdown-menu my-2 button-hover">
                                 <a href="login.php" class="nav-bot-item">Giriş</a>
                             </li>
                         </ul>
@@ -98,7 +101,7 @@
             </a>
         </li>
         <li class="nav-item h5">
-            G KOD DÜZENLE
+            G KOD İŞLEMLERİ
         </li>
     </ul>
 </div>
