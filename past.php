@@ -27,10 +27,14 @@
                     ?>
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item<?= $key ?>"
+                                    <button class="accordion-button collapsed row" type="button" data-bs-toggle="collapse" data-bs-target="#item<?= $key ?>"
                                         aria-expanded="false" aria-controls="item<?= $key ?>">
-                                        <?= !empty($value["aciklama"]) ? $value["aciklama"] : "G-Kod"; ?>
-                                        <?=  " - " . $value["zaman"]; ?>
+                                        <span class="col-6">
+                                            <?= !empty($value["aciklama"]) ? $value["aciklama"] : "G-Kod"; ?>
+                                        </span>
+                                        <span class="col-6 text-end">
+                                            <?= $value["zaman"]; ?>
+                                        </span>
                                     </button>
                                 </h2>
                                 <div id="item<?= $key ?>" class="accordion-collapse collapse" data-bs-parent="#gecmis">
