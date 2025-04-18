@@ -679,8 +679,6 @@
             <button id="copy_btn" class="btn btn-outline-success col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
             <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
             <script>
-                var siralanmis = false;
-
                 function sirala() {
                     var cikarElemani = document.getElementById("cikar");
                     if (!cikarElemani) return;
@@ -794,17 +792,13 @@
                     yLabel = turkceToIngilizce(yLabel);
                     var isim = `${ekle}_${xLabel}_${yLabel}_Siralanmis`;
                     var baslik = document.getElementById("sonucAciklama").innerText;
-                    gonder(baslik + "_" + isim);
+                    gonder();
                     console.log(sonuc);
                 }
 
-                function gonder(name = null) {
+                function gonder() {
                     var yazi = document.getElementById("kopyala").innerText;
                     let body = "veri=" + encodeURIComponent(yazi);
-
-                    if (name !== null) {
-                        body += "&name=" + encodeURIComponent(name);
-                    }
 
                     fetch("index.php", {
                             method: "POST",
@@ -827,11 +821,8 @@
                     });
                     var url = URL.createObjectURL(blob);
 
-                    if (siralanmis == true) {
-                        var aciklama = "<?= $aciklama; ?>_Siralanmis";
-                    } else {
-                        var aciklama = "<?= $aciklama; ?>";
-                    }
+                    var aciklama = "<?= $aciklama; ?>";
+                    
                     if (aciklama == "") {
                         aciklama = "gkod";
                     }
