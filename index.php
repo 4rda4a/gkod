@@ -292,8 +292,8 @@
                                     </div>
                                     <script>
                                         document.addEventListener('DOMContentLoaded', function() {
-                                            const durumKutu = document.getElementById('grupDurum<?= $i; ?>');
-                                            const durumInput = document.getElementById('durumKutuId<?= $i; ?>');
+                                            var durumKutu = document.getElementById('grupDurum<?= $i; ?>');
+                                            var durumInput = document.getElementById('durumKutuId<?= $i; ?>');
 
                                             durumKutu.addEventListener('change', function() {
                                                 if (this.checked) {
@@ -324,11 +324,11 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    const kutu = document.querySelectorAll('.aperture-checkbox');
+                    var kutu = document.querySelectorAll('.aperture-checkbox');
 
                     kutu.forEach(function(checkbox) {
                         checkbox.addEventListener('change', function() {
-                            const secili = this.dataset.aperture;
+                            var secili = this.dataset.aperture;
                             if (this.checked) {
                                 kutu.forEach(function(digerCheckbox) {
                                     if (digerCheckbox !== checkbox && digerCheckbox.dataset.aperture === secili) {
@@ -666,13 +666,13 @@
                 var siralanmis = false;
 
                 function sirala() {
-                    const cikarElemani = document.getElementById("cikar");
+                    var cikarElemani = document.getElementById("cikar");
                     if (!cikarElemani) return;
 
-                    const veri = cikarElemani.innerText.trim();
-                    const satirlar = veri.split('\n');
+                    var veri = cikarElemani.innerText.trim();
+                    var satirlar = veri.split('\n');
 
-                    const bloklar = [];
+                    var bloklar = [];
                     let geciciBlok = [];
 
                     // Blokları ayır
@@ -691,18 +691,18 @@
 
                     // Değer çıkarıcı fonksiyonlar
                     function yDegeriAl(blok) {
-                        const match = blok[0].match(/Y([0-9.]+)/);
+                        var match = blok[0].match(/Y([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
                     }
 
                     function xDegeriAl(blok) {
-                        const match = blok[0].match(/X([0-9.]+)/);
+                        var match = blok[0].match(/X([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
                     }
 
                     // Yön bilgilerini al
-                    const yAlt = document.getElementById("yAlt").checked;
-                    const xSol = document.getElementById("xSol").checked;
+                    var yAlt = document.getElementById("yAlt").checked;
+                    var xSol = document.getElementById("xSol").checked;
 
                     // Y sıralama (Alt → Üst ya da Üst → Alt)
                     bloklar.sort((a, b) => {
@@ -710,18 +710,18 @@
                     });
 
                     // Y’ye göre gruplama
-                    const gruplar = {};
+                    var gruplar = {};
                     for (let blok of bloklar) {
-                        const y = yDegeriAl(blok);
+                        var y = yDegeriAl(blok);
                         if (!gruplar[y]) gruplar[y] = [];
                         gruplar[y].push(blok);
                     }
 
-                    const sonuc = [];
+                    var sonuc = [];
                     Object.keys(gruplar)
                         .sort((a, b) => yAlt ? a - b : b - a)
                         .forEach((y, index) => {
-                            const grup = gruplar[y];
+                            var grup = gruplar[y];
                             grup.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
                             if (index % 2 !== 0) grup.reverse(); // zigzag
                             sonuc.push(...grup);
@@ -732,7 +732,7 @@
                     document.getElementById("cikar").style.whiteSpace = 'pre-wrap';
 
                     sonuc.forEach((blok, index) => {
-                        const satirlar = blok.map((line, lineIndex) => {
+                        var satirlar = blok.map((line, lineIndex) => {
                             if (index === 0 && lineIndex === 0) {
                                 return line.replace(/^G1/, 'G0');
                             } else if (lineIndex === 0) {
@@ -741,20 +741,42 @@
                             return line;
                         });
 
-                        const satirHtml = satirlar.map(s => s.replace(/,/g, ',<br>')).join('<br>') + '<br><br>';
+                        var satirHtml = satirlar.map(s => s.replace(/,/g, ',<br>')).join('<br>') + '<br><br>';
                         document.getElementById("cikar").innerHTML += satirHtml;
                     });
 
                     // Tüm virgülleri en sonda sil
-                    const finalHtml = document.getElementById("cikar").innerHTML.replace(/,/g, '');
+                    var finalHtml = document.getElementById("cikar").innerHTML.replace(/,/g, '');
                     document.getElementById("cikar").innerHTML = finalHtml;
 
+                    siralanmis = true;
+
+                    var xSecim = document.querySelector('input[name="xBaslangic"]:checked');
+                    var ySecim = document.querySelector('input[name="yBaslangic"]:checked');
+
+                    var xLabel = document.querySelector(`label[for="${xSecim.id}"]`).innerText.trim();
+                    var yLabel = document.querySelector(`label[for="${ySecim.id}"]`).innerText.trim();
+
+                    function turkceToIngilizce(str) {
+                        return str
+                            .replace(/ç/g, "c").replace(/Ç/g, "C")
+                            .replace(/ğ/g, "g").replace(/Ğ/g, "G")
+                            .replace(/ı/g, "i").replace(/İ/g, "I")
+                            .replace(/ö/g, "o").replace(/Ö/g, "O")
+                            .replace(/ş/g, "s").replace(/Ş/g, "S")
+                            .replace(/ü/g, "u").replace(/Ü/g, "U");
+                    }
+
+                    xLabel = turkceToIngilizce(xLabel);
+                    yLabel = turkceToIngilizce(yLabel);
+
+                    var isim = `${xLabel}_${yLabel}_Siralanmis`;
                     // Sunucuya gönder
-                    gonder("Siralanmis");
+                    gonder(isim);
                 }
 
                 function gonder(name = null) {
-                    const yazi = document.getElementById("kopyala").innerText;
+                    var yazi = document.getElementById("kopyala").innerText;
                     let body = "veri=" + encodeURIComponent(yazi);
 
                     if (name !== null) {
@@ -775,12 +797,12 @@
                 }
 
                 function dosyayaYaz() {
-                    const icerik = document.getElementById("kopyala").innerText;
+                    var icerik = document.getElementById("kopyala").innerText;
 
-                    const blob = new Blob([icerik], {
+                    var blob = new Blob([icerik], {
                         type: "text/plain;charset=utf-8"
                     });
-                    const url = URL.createObjectURL(blob);
+                    var url = URL.createObjectURL(blob);
 
                     if (siralanmis == true) {
                         var aciklama = "<?= $aciklama; ?>_Siralanmis";
@@ -791,7 +813,7 @@
                         aciklama = "gkod";
                     }
 
-                    const a = document.createElement("a");
+                    var a = document.createElement("a");
                     a.href = url;
                     a.download = aciklama + ".tap";
                     a.click();
