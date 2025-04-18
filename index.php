@@ -626,7 +626,40 @@
                 // echo "X" . $veri_x . "Y" . $veri_y . "Z" . $emniyetliYukseklik . "<br>";
             } ?>
             <a onclick="dosyayaYaz()" class="btn btn-outline-primary mb-3 col-sm-1" style="position: fixed;right: 5%;top: 16%;">İndir</a>
-            <a onclick="sirala()" class="btn btn-outline-warning mb-3 col-sm-1" style="position: fixed;right: 5%;top: 22%;">Sırala</a>
+            <div class="col-sm-1" style="position: fixed;right: 5%;top: 22%;">
+                <a onclick="sirala()" class="btn btn-outline-warning mb-3 col-12">Sırala</a>
+                <div>
+                    <p class="m-0">X Başlangıç:</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="xBaslangic" id="xSol" checked>
+                        <label class="form-check-label" for="xSol">
+                            Sol
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="xBaslangic" id="xSag">
+                        <label class="form-check-label" for="xSag">
+                            Sağ
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <p class="m-0">Y Başlangıç:</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="yBaslangic" id="yAlt" checked>
+                        <label class="form-check-label" for="yAlt">
+                            Alt
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="yBaslangic" id="yUst">
+                        <label class="form-check-label" for="yUst">
+                            Üst
+                        </label>
+                    </div>
+                </div>
+            </div>
             <button id="copy_btn" class="btn btn-outline-success col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
             <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
             <script>
@@ -642,6 +675,7 @@
                     const bloklar = [];
                     let geciciBlok = [];
 
+                    // Blokları ayır
                     for (let satir of satirlar) {
                         satir = satir.trim();
                         if (satir === "") {
@@ -655,54 +689,68 @@
                     }
                     if (geciciBlok.length > 0) bloklar.push(geciciBlok);
 
-                    function yDegeriAl(baslik) {
-                        const match = baslik.match(/Y([0-9.]+)/);
+                    // Değer çıkarıcı fonksiyonlar
+                    function yDegeriAl(blok) {
+                        const match = blok[0].match(/Y([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
                     }
 
-                    function xDegeriAl(baslik) {
-                        const match = baslik.match(/X([0-9.]+)/);
+                    function xDegeriAl(blok) {
+                        const match = blok[0].match(/X([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
                     }
 
-                    bloklar.sort((a, b) => yDegeriAl(a[0]) - yDegeriAl(b[0]));
+                    // Yön bilgilerini al
+                    const yAlt = document.getElementById("yAlt").checked;
+                    const xSol = document.getElementById("xSol").checked;
 
+                    // Y sıralama (Alt → Üst ya da Üst → Alt)
+                    bloklar.sort((a, b) => {
+                        return yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a);
+                    });
+
+                    // Y’ye göre gruplama
                     const gruplar = {};
                     for (let blok of bloklar) {
-                        const y = yDegeriAl(blok[0]);
+                        const y = yDegeriAl(blok);
                         if (!gruplar[y]) gruplar[y] = [];
                         gruplar[y].push(blok);
                     }
 
-                    let isLeftToRight = true;
                     const sonuc = [];
-
                     Object.keys(gruplar)
-                        .sort((a, b) => parseFloat(a) - parseFloat(b))
-                        .forEach(y => {
+                        .sort((a, b) => yAlt ? a - b : b - a)
+                        .forEach((y, index) => {
                             const grup = gruplar[y];
-                            grup.sort((a, b) => xDegeriAl(a[0]) - xDegeriAl(b[0]));
-                            if (!isLeftToRight) grup.reverse();
+                            grup.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
+                            if (index % 2 !== 0) grup.reverse(); // zigzag
                             sonuc.push(...grup);
-                            isLeftToRight = !isLeftToRight;
                         });
 
-                    console.log(sonuc);
+                    // HTML çıktısı oluştur
                     document.getElementById("cikar").innerHTML = "";
                     document.getElementById("cikar").style.whiteSpace = 'pre-wrap';
-                    sonuc.forEach((value, index) => {
-                        if (index === 0) {
-                            value = String(value).replace(/^G1/, 'G0');
-                        } else {
-                            value = String(value).replace(/^G0/, 'G1');
-                        }
-                        let satir = String(value).replace(/,/g, ',<br>') + '<br><br>';
-                        document.getElementById("cikar").innerHTML += satir;
+
+                    sonuc.forEach((blok, index) => {
+                        const satirlar = blok.map((line, lineIndex) => {
+                            if (index === 0 && lineIndex === 0) {
+                                return line.replace(/^G1/, 'G0');
+                            } else if (lineIndex === 0) {
+                                return line.replace(/^G0/, 'G1');
+                            }
+                            return line;
+                        });
+
+                        const satirHtml = satirlar.map(s => s.replace(/,/g, ',<br>')).join('<br>') + '<br><br>';
+                        document.getElementById("cikar").innerHTML += satirHtml;
                     });
 
-                    document.getElementById("cikar").innerHTML = document.getElementById("cikar").innerHTML.replace(/,/g, '');
+                    // Tüm virgülleri en sonda sil
+                    const finalHtml = document.getElementById("cikar").innerHTML.replace(/,/g, '');
+                    document.getElementById("cikar").innerHTML = finalHtml;
+
+                    // Sunucuya gönder
                     gonder("Siralanmis");
-                    var siralanmis = true;
                 }
 
                 function gonder(name = null) {
