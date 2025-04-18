@@ -684,14 +684,10 @@
                 function sirala() {
                     var cikarElemani = document.getElementById("cikar");
                     if (!cikarElemani) return;
-
                     var veri = cikarElemani.innerText.trim();
                     var satirlar = veri.split('\n');
-
                     var bloklar = [];
                     let geciciBlok = [];
-
-                    // Blokları ayır
                     for (let satir of satirlar) {
                         satir = satir.trim();
                         if (satir === "") {
@@ -705,7 +701,6 @@
                     }
                     if (geciciBlok.length > 0) bloklar.push(geciciBlok);
 
-                    // Değer çıkarıcı fonksiyonlar
                     function yDegeriAl(blok) {
                         var match = blok[0].match(/Y([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
@@ -715,43 +710,29 @@
                         var match = blok[0].match(/X([0-9.]+)/);
                         return match ? parseFloat(match[1]) : 0;
                     }
-
-                    // Yön bilgilerini al
                     var yAlt = document.getElementById("yAlt").checked;
                     var xSol = document.getElementById("xSol").checked;
-
-                    // Yönü kontrol et (X ya da Y)
                     var yonSecim = document.querySelector('input[name="yonSec"]:checked').id;
-
                     if (yonSecim === "xYon") {
-                        // Y'ye göre sırala (yatayda ilerleyeceğiz, satırlar yukarı/ aşağı)
                         bloklar.sort((a, b) => {
                             return yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a);
                         });
                     } else {
-                        // X’e göre sırala (dikeyde ilerleyeceğiz, sütunlar sola/sağa)
                         bloklar.sort((a, b) => {
                             return xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a);
                         });
                     }
 
                     var sonuc = [];
-
                     if (yonSecim === "xYon") {
                         var ekle = "X";
-                        // Y’ye göre sırala
                         bloklar.sort((a, b) => yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a));
-
-                        // Aynı Y'ye sahip blokları grupla
                         let gruplar = {};
                         for (let blok of bloklar) {
                             let y = yDegeriAl(blok);
                             if (!gruplar[y]) gruplar[y] = [];
                             gruplar[y].push(blok);
                         }
-
-
-                        // Grupları sırayla işle
                         Object.keys(gruplar)
                             .sort((a, b) => yAlt ? a - b : b - a)
                             .forEach((y, index) => {
@@ -760,21 +741,15 @@
                                 if (index % 2 !== 0) grup.reverse();
                                 sonuc.push(...grup);
                             });
-
                     } else {
                         var ekle = "Y";
-                        // X’e göre sırala
                         bloklar.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
-
-                        // Aynı X'e sahip blokları grupla
                         let gruplar = {};
                         for (let blok of bloklar) {
                             let x = xDegeriAl(blok);
                             if (!gruplar[x]) gruplar[x] = [];
                             gruplar[x].push(blok);
                         }
-
-                        // Grupları sırayla işle
                         Object.keys(gruplar)
                             .sort((a, b) => xSol ? a - b : b - a)
                             .forEach((x, index) => {
@@ -784,12 +759,8 @@
                                 sonuc.push(...grup);
                             });
                     }
-
-
-                    // HTML çıktısı oluştur
                     document.getElementById("cikar").innerHTML = "";
                     document.getElementById("cikar").style.whiteSpace = 'pre-wrap';
-
                     sonuc.forEach((blok, index) => {
                         var satirlar = blok.map((line, lineIndex) => {
                             if (index === 0 && lineIndex === 0) {
@@ -799,20 +770,14 @@
                             }
                             return line;
                         });
-
                         var satirHtml = satirlar.map(s => s.replace(/,/g, ',<br>')).join('<br>') + '<br><br>';
                         document.getElementById("cikar").innerHTML += satirHtml;
                     });
-
-                    // Tüm virgülleri en sonda sil
                     var finalHtml = document.getElementById("cikar").innerHTML.replace(/,/g, '');
                     document.getElementById("cikar").innerHTML = finalHtml;
-
                     siralanmis = true;
-
                     var xSecim = document.querySelector('input[name="xBaslangic"]:checked');
                     var ySecim = document.querySelector('input[name="yBaslangic"]:checked');
-
                     var xLabel = document.querySelector(`label[for="${xSecim.id}"]`).innerText.trim();
                     var yLabel = document.querySelector(`label[for="${ySecim.id}"]`).innerText.trim();
 
@@ -825,12 +790,9 @@
                             .replace(/ş/g, "s").replace(/Ş/g, "S")
                             .replace(/ü/g, "u").replace(/Ü/g, "U");
                     }
-
                     xLabel = turkceToIngilizce(xLabel);
                     yLabel = turkceToIngilizce(yLabel);
-
                     var isim = `${ekle}_${xLabel}_${yLabel}_Siralanmis`;
-                    // Sunucuya gönder
                     var baslik = document.getElementById("sonucAciklama").innerText;
                     gonder(baslik + "_" + isim);
                     console.log(sonuc);
