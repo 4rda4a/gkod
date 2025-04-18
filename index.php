@@ -630,6 +630,8 @@
             <button id="copy_btn" class="btn btn-outline-success col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
             <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
             <script>
+                var siralanmis = false;
+
                 function sirala() {
                     const cikarElemani = document.getElementById("cikar");
                     if (!cikarElemani) return;
@@ -691,7 +693,7 @@
                     sonuc.forEach((value, index) => {
                         if (index === 0) {
                             value = String(value).replace(/^G1/, 'G0');
-                        }else{
+                        } else {
                             value = String(value).replace(/^G0/, 'G1');
                         }
                         let satir = String(value).replace(/,/g, ',<br>') + '<br><br>';
@@ -699,21 +701,28 @@
                     });
 
                     document.getElementById("cikar").innerHTML = document.getElementById("cikar").innerHTML.replace(/,/g, '');
+                    gonder("Siralanmis");
+                    var siralanmis = true;
                 }
 
-                function gonder() {
+                function gonder(name = null) {
                     const yazi = document.getElementById("kopyala").innerText;
+                    let body = "veri=" + encodeURIComponent(yazi);
+
+                    if (name !== null) {
+                        body += "&name=" + encodeURIComponent(name);
+                    }
 
                     fetch("index.php", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded"
                             },
-                            body: "veri=" + encodeURIComponent(yazi)
+                            body: body
                         })
                         .then(response => response.text())
                         .then(data => {
-                            //console.log("Session'a kaydedildi:");
+                            //console.log("Session'a kaydedildi:", name ?? "(sadece veri)");
                         });
                 }
 
@@ -725,7 +734,11 @@
                     });
                     const url = URL.createObjectURL(blob);
 
-                    var aciklama = "<?= $aciklama; ?>";
+                    if (siralanmis == true) {
+                        var aciklama = "<?= $aciklama; ?>_Siralanmis";
+                    } else {
+                        var aciklama = "<?= $aciklama; ?>";
+                    }
                     if (aciklama == "") {
                         aciklama = "gkod";
                     }
@@ -812,7 +825,9 @@
     <?php
     if (isset($_POST['veri'])) {
         $yeniVeri = $_POST['veri'];
-
+        if (isset($_POST["name"])) {
+            $_SESSION["bilgi"]["aciklama"] = $_SESSION["bilgi"]["aciklama"] . "_" . $_POST["name"];
+        }
         if (!isset($_SESSION['icerik']) || !is_array($_SESSION['icerik'])) {
             $_SESSION['icerik'] = [];
         }
@@ -826,10 +841,10 @@
         //En son çıktıyı ekrenda gösterdiğimizde sessiondaki gerekli verileri siliyoruz
         $_SESSION["gizle"] = true;
         $temp = $_SESSION['icerik'] ?? null;
-        //session_unset();
         if ($temp !== null) {
             $_SESSION['icerik'] = $temp;
         }
+        //session_unset();
     }
     ?>
     <script>
