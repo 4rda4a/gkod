@@ -625,10 +625,82 @@
                 }
                 // echo "X" . $veri_x . "Y" . $veri_y . "Z" . $emniyetliYukseklik . "<br>";
             } ?>
-            <a onclick="dosyayaYaz()" class="btn btn-outline-primary mb-3" style="position: fixed;right: 5%;top: 16%;">İndir</a>
-            <button id="copy_btn" class="btn btn-outline-success" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
-            <a href="?clear=true" class="btn btn-outline-secondary" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
+            <a onclick="dosyayaYaz()" class="btn btn-outline-primary mb-3 col-sm-1" style="position: fixed;right: 5%;top: 16%;">İndir</a>
+            <a onclick="sirala()" class="btn btn-outline-warning mb-3 col-sm-1" style="position: fixed;right: 5%;top: 22%;">Sırala</a>
+            <button id="copy_btn" class="btn btn-outline-success col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
+            <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
             <script>
+                function sirala() {
+                    const cikarElemani = document.getElementById("cikar");
+                    if (!cikarElemani) return;
+
+                    const veri = cikarElemani.innerText.trim();
+                    const satirlar = veri.split('\n');
+
+                    const bloklar = [];
+                    let geciciBlok = [];
+
+                    for (let satir of satirlar) {
+                        satir = satir.trim();
+                        if (satir === "") {
+                            if (geciciBlok.length > 0) {
+                                bloklar.push(geciciBlok);
+                                geciciBlok = [];
+                            }
+                        } else {
+                            geciciBlok.push(satir);
+                        }
+                    }
+                    if (geciciBlok.length > 0) bloklar.push(geciciBlok);
+
+                    function yDegeriAl(baslik) {
+                        const match = baslik.match(/Y([0-9.]+)/);
+                        return match ? parseFloat(match[1]) : 0;
+                    }
+
+                    function xDegeriAl(baslik) {
+                        const match = baslik.match(/X([0-9.]+)/);
+                        return match ? parseFloat(match[1]) : 0;
+                    }
+
+                    bloklar.sort((a, b) => yDegeriAl(a[0]) - yDegeriAl(b[0]));
+
+                    const gruplar = {};
+                    for (let blok of bloklar) {
+                        const y = yDegeriAl(blok[0]);
+                        if (!gruplar[y]) gruplar[y] = [];
+                        gruplar[y].push(blok);
+                    }
+
+                    let isLeftToRight = true;
+                    const sonuc = [];
+
+                    Object.keys(gruplar)
+                        .sort((a, b) => parseFloat(a) - parseFloat(b))
+                        .forEach(y => {
+                            const grup = gruplar[y];
+                            grup.sort((a, b) => xDegeriAl(a[0]) - xDegeriAl(b[0]));
+                            if (!isLeftToRight) grup.reverse();
+                            sonuc.push(...grup);
+                            isLeftToRight = !isLeftToRight;
+                        });
+
+                    console.log(sonuc);
+                    document.getElementById("cikar").innerHTML = "";
+                    document.getElementById("cikar").style.whiteSpace = 'pre-wrap';
+                    sonuc.forEach((value, index) => {
+                        if (index === 0) {
+                            value = String(value).replace(/^G1/, 'G0');
+                        }else{
+                            value = String(value).replace(/^G0/, 'G1');
+                        }
+                        let satir = String(value).replace(/,/g, ',<br>') + '<br><br>';
+                        document.getElementById("cikar").innerHTML += satir;
+                    });
+
+                    document.getElementById("cikar").innerHTML = document.getElementById("cikar").innerHTML.replace(/,/g, '');
+                }
+
                 function gonder() {
                     const yazi = document.getElementById("kopyala").innerText;
 
@@ -641,7 +713,7 @@
                         })
                         .then(response => response.text())
                         .then(data => {
-                            console.log("Session'a kaydedildi: " + data);
+                            //console.log("Session'a kaydedildi:");
                         });
                 }
 
@@ -674,7 +746,7 @@
                     textarea.select();
                     document.execCommand("copy");
                     document.body.removeChild(textarea);
-                    document.getElementById("copy_btn").innerHTML = "Metin Kopyalandı";
+                    document.getElementById("copy_btn").innerHTML = "Kopyalandı";
                     document.getElementById("copy_btn").classList.add("btn-outline-success");
                 }
             </script>
@@ -685,10 +757,10 @@
             echo "G1F" . $g01Hiz . "<br>";
             echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br><br>";
 
+            echo '<span id="cikar">';
             if ($edit) {
                 $veri_array = $icerik["veri_array"];
             }
-
             foreach ($veri_array as $index => $item) {
                 if ($index == 0) {
                     $gDurum = 0;
@@ -728,6 +800,8 @@
                 }
                 echo "<br>";
             }
+            echo '</span>';
+
             global $homeXKordinati, $homeYKordinati, $homeZKordinati;
             echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br>";
             echo "M30";
@@ -752,7 +826,7 @@
         //En son çıktıyı ekrenda gösterdiğimizde sessiondaki gerekli verileri siliyoruz
         $_SESSION["gizle"] = true;
         $temp = $_SESSION['icerik'] ?? null;
-        session_unset();
+        //session_unset();
         if ($temp !== null) {
             $_SESSION['icerik'] = $temp;
         }
