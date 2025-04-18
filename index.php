@@ -600,8 +600,8 @@
             {
                 $kordinat = $value;
                 preg_match('/X([\d.]+)Y([\d.]+)/', $kordinat, $cikti);
-                $veri_x = $cikti[1];
-                $veri_y = $cikti[2];
+                $veri_x = number_format($cikti[1], 2);
+                $veri_y = number_format($cikti[2], 2);
                 $_SESSION["veri_x"] = $veri_x = floatval($veri_x) + floatval($x);
                 $_SESSION["veri_y"] = $veri_y = floatval($veri_y) + floatval($y);
                 $_SESSION["d0_location"] = "X" . $_SESSION["veri_x"] . "Y" . $_SESSION["veri_y"];
