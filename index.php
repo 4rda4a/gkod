@@ -659,6 +659,22 @@
                         </label>
                     </div>
                 </div>
+                <hr>
+                <div>
+                    <p class="m-0">Yön:</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="yonSec" id="xYon" checked>
+                        <label class="form-check-label" for="xYon">
+                            X
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="yonSec" id="yYon">
+                        <label class="form-check-label" for="yYon">
+                            Y
+                        </label>
+                    </div>
+                </div>
             </div>
             <button id="copy_btn" class="btn btn-outline-success col-sm-1" style="position: fixed;right: 5%;top: 10%;" onclick="metniKopyala()">Kopyala</button>
             <a href="?clear=true" class="btn btn-outline-secondary col-sm-1" style="position: fixed;left: 18%;top: 10%;">Temizle</a>
@@ -704,28 +720,71 @@
                     var yAlt = document.getElementById("yAlt").checked;
                     var xSol = document.getElementById("xSol").checked;
 
-                    // Y sıralama (Alt → Üst ya da Üst → Alt)
-                    bloklar.sort((a, b) => {
-                        return yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a);
-                    });
+                    // Yönü kontrol et (X ya da Y)
+                    var yonSecim = document.querySelector('input[name="yonSec"]:checked').id;
 
-                    // Y’ye göre gruplama
-                    var gruplar = {};
-                    for (let blok of bloklar) {
-                        var y = yDegeriAl(blok);
-                        if (!gruplar[y]) gruplar[y] = [];
-                        gruplar[y].push(blok);
+                    if (yonSecim === "xYon") {
+                        // Y'ye göre sırala (yatayda ilerleyeceğiz, satırlar yukarı/ aşağı)
+                        bloklar.sort((a, b) => {
+                            return yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a);
+                        });
+                    } else {
+                        // X’e göre sırala (dikeyde ilerleyeceğiz, sütunlar sola/sağa)
+                        bloklar.sort((a, b) => {
+                            return xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a);
+                        });
                     }
 
                     var sonuc = [];
-                    Object.keys(gruplar)
-                        .sort((a, b) => yAlt ? a - b : b - a)
-                        .forEach((y, index) => {
-                            var grup = gruplar[y];
-                            grup.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
-                            if (index % 2 !== 0) grup.reverse(); // zigzag
-                            sonuc.push(...grup);
-                        });
+
+                    if (yonSecim === "xYon") {
+                        var ekle = "X";
+                        // Y’ye göre sırala
+                        bloklar.sort((a, b) => yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a));
+
+                        // Aynı Y'ye sahip blokları grupla
+                        let gruplar = {};
+                        for (let blok of bloklar) {
+                            let y = yDegeriAl(blok);
+                            if (!gruplar[y]) gruplar[y] = [];
+                            gruplar[y].push(blok);
+                        }
+
+
+                        // Grupları sırayla işle
+                        Object.keys(gruplar)
+                            .sort((a, b) => yAlt ? a - b : b - a)
+                            .forEach((y, index) => {
+                                let grup = gruplar[y];
+                                grup.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
+                                if (index % 2 !== 0) grup.reverse();
+                                sonuc.push(...grup);
+                            });
+
+                    } else {
+                        var ekle = "Y";
+                        // X’e göre sırala
+                        bloklar.sort((a, b) => xSol ? xDegeriAl(a) - xDegeriAl(b) : xDegeriAl(b) - xDegeriAl(a));
+
+                        // Aynı X'e sahip blokları grupla
+                        let gruplar = {};
+                        for (let blok of bloklar) {
+                            let x = xDegeriAl(blok);
+                            if (!gruplar[x]) gruplar[x] = [];
+                            gruplar[x].push(blok);
+                        }
+
+                        // Grupları sırayla işle
+                        Object.keys(gruplar)
+                            .sort((a, b) => xSol ? a - b : b - a)
+                            .forEach((x, index) => {
+                                let grup = gruplar[x];
+                                grup.sort((a, b) => yAlt ? yDegeriAl(a) - yDegeriAl(b) : yDegeriAl(b) - yDegeriAl(a));
+                                if (index % 2 !== 0) grup.reverse();
+                                sonuc.push(...grup);
+                            });
+                    }
+
 
                     // HTML çıktısı oluştur
                     document.getElementById("cikar").innerHTML = "";
@@ -770,9 +829,11 @@
                     xLabel = turkceToIngilizce(xLabel);
                     yLabel = turkceToIngilizce(yLabel);
 
-                    var isim = `${xLabel}_${yLabel}_Siralanmis`;
+                    var isim = `${ekle}_${xLabel}_${yLabel}_Siralanmis`;
                     // Sunucuya gönder
-                    gonder(isim);
+                    var baslik = document.getElementById("sonucAciklama").innerText;
+                    gonder(baslik + "_" + isim);
+                    console.log(sonuc);
                 }
 
                 function gonder(name = null) {
@@ -835,7 +896,7 @@
             </script>
         <?php
             echo "<pre class='container col-sm-5 fs-6 mt-5 pt-2 border rounded shadow-lg ps-4' id='kopyala' style='font-size: 0.8rem!important;'>";
-            echo "($aciklama)<br>";
+            echo "(<span id='sonucAciklama'>$aciklama</span>)<br>";
             //echo "G0F$g00Hiz" . "<br>";
             echo "G1F" . $g01Hiz . "<br>";
             echo "G0X" . $homeXKordinati . "Y" . $homeYKordinati . "Z" . $homeZKordinati . "<br><br>";
@@ -896,7 +957,7 @@
     if (isset($_POST['veri'])) {
         $yeniVeri = $_POST['veri'];
         if (isset($_POST["name"])) {
-            $_SESSION["bilgi"]["aciklama"] = $_SESSION["bilgi"]["aciklama"] . "_" . $_POST["name"];
+            $_SESSION["bilgi"]["aciklama"] = $_POST["name"];
         }
         if (!isset($_SESSION['icerik']) || !is_array($_SESSION['icerik'])) {
             $_SESSION['icerik'] = [];
