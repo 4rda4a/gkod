@@ -134,7 +134,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:09:23</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>02:14:29</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>02:14:29</span>
                                     </small>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Pls - Dirsek Bayrak - (PetÇam)
                                         </span>
                                     </span>
                                 </div>
@@ -178,7 +178,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:19:01</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>00:50:18</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>00:50:18</span>
                                     </small>
                                 </div>
                             </div>
@@ -192,7 +192,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Tapa - (PetÇam)
                                         </span>
                                     </span>
                                 </div>
@@ -222,7 +222,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:09:23</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>02:14:29</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>02:14:29</span>
                                     </small>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Çoraplık - Mafsal (ERKEK) - Mini Plus
                                         </span>
                                     </span>
                                 </div>
@@ -266,7 +266,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:16:36</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>06:24:55</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>06:24:55</span>
                                     </small>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Zemin - Ütü dinlendirme SQUAD baskısız
                                         </span>
                                     </span>
                                 </div>
@@ -308,7 +308,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>02:32:42</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>03:24:55</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>03:24:55</span>
                                     </small>
                                 </div>
                             </div>
@@ -322,7 +322,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Pls - Dış gövde-Buhar ayar mek.siyah azimut
                                         </span>
                                     </span>
                                 </div>
@@ -352,7 +352,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:16:36</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>6:24:55</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>6:24:55</span>
                                     </small>
                                 </div>
                             </div>
@@ -366,7 +366,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Ayak - Kazan destek takozu (sac/mn)
                                         </span>
                                     </span>
                                 </div>
@@ -394,7 +394,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>05:02:30</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>08:59:05</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>08:59:05</span>
                                     </small>
                                 </div>
                             </div>
@@ -408,7 +408,7 @@
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
                                         <span class="fw-bold fs-5 col">
-                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                            Blok - Kordon koruyucu
                                         </span>
                                     </span>
                                 </div>
@@ -438,7 +438,7 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:47:21</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>04:12:43</span>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-duration-alt pe-2 align-middle"></i></i>04:12:43</span>
                                     </small>
                                 </div>
                             </div>
