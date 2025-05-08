@@ -7,18 +7,21 @@
     <title>Üretim Takip Sistemi SİLTER | Yönetim</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'>
     <style>
         .text-bg-orange {
             background-color: var(--bs-orange);
         }
 
         .card-header {
+            animation: 1s linear infinite progress-bar-stripes !important;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .progress {
+            height: 1.5rem;
             border-color: var(--bs-border-color) !important;
             --bs-progress-bg: var(--bs-border-color);
         }
@@ -41,6 +44,31 @@
 
         .main-title {
             text-shadow: 1px 1px 30px;
+        }
+
+        .main-info-text {
+            overflow: hidden;
+        }
+
+        .info-text {
+            display: flex;
+            width: max-content;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .fi-rs-sigma {
+            margin-right: 2px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -70,23 +98,33 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-6 g-4 justify-content-center">
                     <div class="col shadow">
                         <div class="card h-100 text-bg-danger">
-                            <div class="card-header fw-bold fs-4 bg-red">PLS01 / KRAUSE MAFFIE</div>
+                            <div class="card-header fw-bold fs-5 bg-red">PLS01 / KRAUSE MAFFIE</div>
                             <div class="card-body py-2 row">
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36549</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172018</span>
-                                </div>
-                                <div class="row my-3">
-                                    <span class="fw-bold fs-5 col-7"><i class="bi bi-exclamation-circle pe-2"></i>Kalıp Arıza</span>
-                                    <div class="col-5">
-                                        <div class="progress h-100 border" role="progressbar">
-                                            <div class="progress-bar bg-danger fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 97%"></div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-exclamation-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    Kalıp Arıza Sorunu
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">500 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar bg-danger fw-bold fs-6 progress-bar-striped" style="width: 97%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">97%</p>
                                         </div>
-                                        <p class="m-0 text-center fw-bold">97%</p>
                                     </div>
                                 </div>
                             </div>
@@ -96,41 +134,51 @@
                                         <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:09:23</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>02:14:29</span>
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col shadow">
-                        <div class="card h-100 text-bg-orange text-light">
-                            <div class="card-header bg-orange fw-bold fs-5">PLS01 / ERAT MAK.</div>
+                        <div class="card h-100 text-bg-orange">
+                            <div class="card-header fw-bold fs-5 bg-orange">PLS01 / ERAT MAK.</div>
                             <div class="card-body py-2 row">
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36547</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172022</span>
-                                </div>
-                                <div class="row my-3">
-                                    <span class="fw-bold fs-5 col-7"><i class="bi bi-play-circle pe-2"></i>Çalışıyor</span>
-                                    <div class="col-5">
-                                        <div class="progress h-100 border" role="progressbar">
-                                            <div class="progress-bar text-bg-orange fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 15%"></div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    Yemek Molası
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">1000 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar text-bg-orange fw-bold fs-6 progress-bar-striped" style="width: 12%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">12%</p>
                                         </div>
-                                        <p class="m-0 text-center fw-bold">15%</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="row align-items-center">
                                     <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>01:42:11</span>
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:19:01</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>00:50:18</span>
                                     </small>
                                 </div>
                             </div>
@@ -138,179 +186,259 @@
                     </div>
                     <div class="col shadow">
                         <div class="card h-100 text-bg-danger">
-                            <div class="card-header bg-red fw-bold fs-5">PLS01 / ENGEL 350</div>
+                            <div class="card-header fw-bold fs-5 bg-red">PLS01 / ENGEL 350</div>
                             <div class="card-body py-2 row">
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36545</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2171990</span>
-                                </div>
-                                <div class="text-center">
-                                    <span class="fw-bold fs-5"><i class="bi bi-exclamation-circle pe-2"></i>Kalıp Arıza</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row align-items-center">
-                                    <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:59:01</span>
-                                    </small>
-                                    <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col shadow">
-                        <div class="card h-100 text-bg-orange text-light">
-                            <div class="card-header bg-orange fw-bold fs-5">PLS01 / YIZUMI</div>
-                            <div class="card-body py-2 row">
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36540</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
-                                </div>
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172019</span>
-                                </div>
-                                <div class="text-center">
-                                    <span class="fw-bold fs-5"><i class="bi bi-pause-circle pe-2"></i>Yemek Molası</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row align-items-center">
-                                    <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>04:08:36</span>
-                                    </small>
-                                    <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col shadow">
-                        <div class="card h-100 text-bg-success">
-                            <div class="card-header bg-green fw-bold fs-5">PLS01 / DEMAG 250 S3</div>
-                            <div class="card-body py-2">
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36569</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
-                                </div>
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172015</span>
-                                </div>
-                                <div class="row my-3">
-                                    <span class="fw-bold fs-5 col-7"><i class="bi bi-play-circle pe-2"></i>Çalışıyor</span>
-                                    <div class="col-5">
-                                        <div class="progress h-100 border border-success" role="progressbar">
-                                            <div class="progress-bar bg-success fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 80%"></div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-exclamation-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    Elektrik Arıza
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">300 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar bg-danger fw-bold fs-6 progress-bar-striped" style="width: 42%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">42%</p>
                                         </div>
-                                        <p class="m-0 text-center fw-bold">80%</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="row align-items-center">
                                     <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:36:21</span>
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:09:23</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>02:14:29</span>
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col shadow">
-                        <div class="card h-100 text-bg-orange text-light">
-                            <div class="card-header bg-orange fw-bold fs-5">PLS01 / POTENZA 250</div>
+                        <div class="card h-100 text-bg-orange">
+                            <div class="card-header fw-bold fs-5 bg-orange">PLS01 / YIZUMI</div>
                             <div class="card-body py-2 row">
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36568</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS02</span>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172022</span>
-                                </div>
-                                <div class="text-center">
-                                    <span class="fw-bold fs-5"><i class="bi bi-pause-circle pe-2"></i>Yemek Molası</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="row align-items-center">
-                                    <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>03:01:15</span>
-                                    </small>
-                                    <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col shadow">
-                        <div class="card h-100 text-bg-success">
-                            <div class="card-header bg-green fw-bold fs-5">PLS01 / DEMAG 250 NC3</div>
-                            <div class="card-body py-2">
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36569</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS01</span>
-                                </div>
-                                <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172015</span>
-                                </div>
-                                <div class="row my-3">
-                                    <span class="fw-bold fs-5 col-7"><i class="bi bi-play-circle pe-2"></i>Çalışıyor</span>
-                                    <div class="col-5">
-                                        <div class="progress h-100 border border-success" role="progressbar">
-                                            <div class="progress-bar bg-success fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 48%"></div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    Kalıp Değişim
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">2000 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar text-bg-orange fw-bold fs-6 progress-bar-striped" style="width: 55%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">55%</p>
                                         </div>
-                                        <p class="m-0 text-center fw-bold">48%</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="row align-items-center">
                                     <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:36:21</span>
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:16:36</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>06:24:55</span>
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col shadow">
-                        <div class="card h-100 text-bg-orange text-light">
-                            <div class="card-header bg-orange fw-bold fs-5">PLS01 / POTENZA 80</div>
+                        <div class="card h-100 bg-success">
+                            <div class="card-header fw-bold fs-5 bg-green">PLS01 / DEMAG 250 S3</div>
                             <div class="card-body py-2 row">
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-journal-text pe-2"></i>36532</span>
-                                    <span>/</span>
-                                    <span class="fst-italic">OPLS02</span>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
                                 </div>
                                 <div>
-                                    <span class="fw-bold fs-5"><i class="bi bi-box-seam pe-2"></i>2172021</span>
-                                </div>
-                                <div class="text-center">
-                                    <span class="fw-bold fs-5"><i class="bi bi-pause-circle pe-2"></i>Yemek Molası</span>
+                                    <div class="row my-2 align-items-center">
+                                        <div class="col-7">
+                                            <span class="fw-bold fs-5 px-0">
+                                                <i class="bi bi-play-circle pe-2 fs-5"></i>
+                                                Çalışıyor
+                                            </span>
+                                        </div>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">2000 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar bg-success fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 55%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">55%</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="row align-items-center">
                                     <small class="col-sm-6">
-                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>01:10:52</span>
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>02:32:42</span>
                                     </small>
                                     <small class="col-sm-6 text-end">
-                                        <p class="m-0"><i class="bi bi-person-circle"></i> Hamza TUNÇ</p>
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>03:24:55</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col shadow">
+                        <div class="card h-100 text-bg-orange">
+                            <div class="card-header fw-bold fs-5 bg-orange">PLS01 / POTENZA 250</div>
+                            <div class="card-body py-2 row">
+                                <div>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    Belirsiz Duruş
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">1500 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar text-bg-orange fw-bold fs-6 progress-bar-striped" style="width: 86%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">86%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row align-items-center">
+                                    <small class="col-sm-6">
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:16:36</span>
+                                    </small>
+                                    <small class="col-sm-6 text-end">
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>6:24:55</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col shadow">
+                        <div class="card h-100 bg-success">
+                            <div class="card-header fw-bold fs-5 bg-green">PLS01 / DEMAG 250 NC3</div>
+                            <div class="card-body py-2 row">
+                                <div>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="row my-2 align-items-center">
+                                        <div class="col-7">
+                                            <span class="fw-bold fs-5 px-0">
+                                                <i class="bi bi-play-circle pe-2 fs-5"></i>
+                                                Çalışıyor
+                                            </span>
+                                        </div>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">400 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar bg-success fw-bold fs-6 progress-bar-striped progress-bar-animated" style="width: 61%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">61%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row align-items-center">
+                                    <small class="col-sm-6">
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>05:02:30</span>
+                                    </small>
+                                    <small class="col-sm-6 text-end">
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>08:59:05</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col shadow">
+                        <div class="card h-100 text-bg-orange">
+                            <div class="card-header fw-bold fs-5 bg-orange">PLS01 / POTENZA 80</div>
+                            <div class="card-body py-2 row">
+                                <div>
+                                    <span class="fw-bold fs-5 row">
+                                        <i class="bi bi-journal-text pe-0 w-auto"></i>
+                                        <span class="fw-bold fs-5 col">
+                                            Pls - Buton Kilit Azimut (Yekpare Taban)
+                                        </span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="row my-2 align-items-center">
+                                        <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
+                                        <span class="fw-bold fs-5 col-7 px-0">
+                                            <p class="m-0 main-info-text float-end col-9">
+                                                <span class="info-text">
+                                                    AR-GE Numune
+                                                </span>
+                                            </p>
+                                        </span>
+                                        <div class="col-5">
+                                            <p class="m-0 text-center fw-bold">800 Adet</p>
+                                            <div class="progress border" role="progressbar">
+                                                <div class="progress-bar text-bg-orange fw-bold fs-6 progress-bar-striped" style="width: 74%"></div>
+                                            </div>
+                                            <p class="m-0 text-center fw-bold">74%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row align-items-center">
+                                    <small class="col-sm-6">
+                                        <span class="fw-bold fs-5"><i class="bi bi-clock pe-2"></i>00:47:21</span>
+                                    </small>
+                                    <small class="col-sm-6 text-end">
+                                        <span class="fw-bold fs-5"><i class="fi fi-rs-time-check pe-2 align-middle"></i></i>04:12:43</span>
                                     </small>
                                 </div>
                             </div>
