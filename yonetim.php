@@ -43,7 +43,7 @@
         }
 
         .main-title {
-            text-shadow: 1px 1px 30px;
+            text-shadow: 1px 1px 2px #000;
         }
 
         .main-info-text {
@@ -69,6 +69,14 @@
         .fi-rs-sigma {
             margin-right: 2px;
             font-size: 18px;
+        }
+
+        .text-line-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 </head>
@@ -103,7 +111,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Pls - Buton Kilit Azimut (Yekpare Taban)
                                         </span>
                                     </span>
@@ -111,7 +119,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-exclamation-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     Kalıp Arıza Sorunu
@@ -147,7 +155,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Pls - Dirsek Bayrak - (PetÇam)
                                         </span>
                                     </span>
@@ -155,7 +163,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     Yemek Molası
@@ -191,7 +199,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Tapa - (PetÇam)
                                         </span>
                                     </span>
@@ -199,7 +207,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-exclamation-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     Elektrik Arıza
@@ -235,7 +243,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Çoraplık - Mafsal (ERKEK) - Mini Plus
                                         </span>
                                     </span>
@@ -243,7 +251,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     Kalıp Değişim
@@ -279,7 +287,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Zemin - Ütü dinlendirme SQUAD baskısız
                                         </span>
                                     </span>
@@ -321,7 +329,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Pls - Dış gövde-Buhar ayar mek.siyah azimut
                                         </span>
                                     </span>
@@ -329,7 +337,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     Belirsiz Duruş
@@ -365,7 +373,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Ayak - Kazan destek takozu (sac/mn)
                                         </span>
                                     </span>
@@ -407,7 +415,7 @@
                                 <div>
                                     <span class="fw-bold fs-5 row">
                                         <i class="bi bi-journal-text pe-0 w-auto"></i>
-                                        <span class="fw-bold fs-5 col">
+                                        <span class="fw-bold fs-5 col text-line-2">
                                             Blok - Kordon koruyucu
                                         </span>
                                     </span>
@@ -415,7 +423,7 @@
                                 <div>
                                     <div class="row my-2 align-items-center">
                                         <i class="bi bi-pause-circle pe-2 fs-5 position-absolute"></i>
-                                        <span class="fw-bold fs-5 col-7 px-0">
+                                        <span class="fw-bold fs-5 col col-7 px-0">
                                             <p class="m-0 main-info-text float-end col-9">
                                                 <span class="info-text">
                                                     AR-GE Numune
@@ -450,5 +458,4 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
-
 </html>
